@@ -17,7 +17,7 @@ from scripts.verify_projects import validate_registry
 
 def valid_metadata() -> dict:
     return {
-        "id": "portfolio.case-study.identity.synthetic-example",
+        "id": "portfolio.identity.synthetic-example",
         "slug": "/case-studies/identity/synthetic-example/",
         "kind": "case-study",
         "title": "Synthetic identity governance example",
@@ -45,6 +45,14 @@ def test_valid_metadata_passes(tmp_path: Path) -> None:
     path = tmp_path / "artifact.md"
     errors = validate_metadata(valid_metadata(), path=path, validator=load_validator())
     assert errors == []
+
+
+def test_kind_prefixed_legacy_id_is_rejected(tmp_path: Path) -> None:
+    metadata = valid_metadata()
+    metadata["id"] = "portfolio.case-study.identity.synthetic-example"
+    path = tmp_path / "artifact.md"
+    errors = validate_metadata(metadata, path=path, validator=load_validator())
+    assert any("does not match" in error for error in errors)
 
 
 def test_adapted_artifact_requires_attribution(tmp_path: Path) -> None:
