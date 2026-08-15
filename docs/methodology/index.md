@@ -1,0 +1,54 @@
+# Methodology
+
+## Automatic accumulation; deliberate publication
+
+Professional evidence begins in private working systems. Publication is a separate transition with explicit controls.
+
+```mermaid
+flowchart LR
+    A["Private work, study, and experiments"] --> B["Portfolio candidate"]
+    B --> C{"Classification, rights, provenance, sanitization"}
+    C -->|"Not publishable"| B
+    C -->|"Approved public draft"| D["Draft pull request"]
+    D --> E{"Schema, content-boundary, secret, link, and build checks"}
+    E -->|"Fail"| D
+    E -->|"Pass and human approval"| F["Merge"]
+    F --> G["GitHub Pages"]
+```
+
+## Four planes
+
+### 1. Private evidence
+
+Private notes, work records, source relationships, and conversation history remain in their canonical systems. They may support a candidate, but they are never mirrored into this repository.
+
+### 2. Private curation and approval
+
+A candidate records what capability the work demonstrates, its source classification, provenance, publication rights, sanitization risk, and proposed public form. Approval requires both a valid public draft and a deliberate state transition.
+
+### 3. Public artifact repository
+
+This repository contains only sanitized content, public metadata, validation code, and presentation assets. Stable artifact IDs connect public artifacts to private records without exposing private source mappings.
+
+### 4. Presentation
+
+Zensical builds the Markdown corpus into a searchable site. The content contract remains renderer-neutral so presentation technology can change without changing artifact identity.
+
+## CI/CD gates
+
+Pull requests validate:
+
+- Artifact front matter against a JSON Schema
+- Stable IDs, slugs, provenance, rights, and review dates
+- Public content for private references, identifiers, personal data, and suspicious paths
+- Markdown structure and deterministic generated indexes
+- Public project metadata
+- External links and the strict site build
+- Secrets through Gitleaks
+- Regression tests for the publication boundary
+
+Merge to `main` triggers a clean GitHub Pages build. Monthly maintenance checks stale review dates and link health, then opens a GitHub issue rather than silently rewriting authored content.
+
+## Human authority
+
+Automation may reject a public draft. It may not declare private work safe merely because no scanner matched it. Classification, contextual sanitization, and final publication remain human decisions.

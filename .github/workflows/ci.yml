@@ -1,0 +1,67 @@
+name: Portfolio CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    name: Publication quality gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install
+        run: pip install -e ".[dev]"
+
+      - name: Lint Markdown
+        run: python -m scripts.lint_markdown docs templates
+
+      - name: Validate artifact metadata
+        run: python -m scripts.validate_frontmatter docs
+
+      - name: Scan public content boundary
+        run: python -m scripts.scan_public_content
+
+      - name: Validate project registry
+        run: python -m scripts.verify_projects
+
+      - name: Verify generated artifact index
+        run: python -m scripts.build_artifact_index --check
+
+      - name: Check artifact review dates
+        run: python -m scripts.check_review_dates
+
+      - name: Check external links
+        run: python -m scripts.check_links docs README.md CONTRIBUTING.md SECURITY.md --external
+
+      - name: Lint Python
+        run: ruff check scripts tests
+
+      - name: Run regression tests
+        run: pytest
+
+      - name: Build site strictly
+        run: zensical build --clean --strict
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,11 @@
+title = "Portfolio secret-scanning configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Allow generated site output and test caches that are never committed."
+paths = [
+  '''^site/''',
+  '''^\.pytest_cache/''',
+]

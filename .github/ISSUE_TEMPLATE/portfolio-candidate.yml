@@ -1,0 +1,53 @@
+name: Public portfolio artifact proposal
+description: Propose a public-safe artifact or improvement. Private evidence belongs in the private candidate workflow, not this form.
+title: "Candidate: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This form is public. Do not paste private source material, employer details, internal links, screenshots, identifiers, or raw AI conversations.
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Artifact kind
+      options:
+        - Case study
+        - Template
+        - Project card
+        - Technical pattern
+        - Learning note
+        - Architecture
+    validations:
+      required: true
+  - type: textarea
+    id: public_value
+    attributes:
+      label: Public professional value
+      description: What capability, reasoning, or transferable practice would this artifact demonstrate?
+    validations:
+      required: true
+  - type: dropdown
+    id: provenance
+    attributes:
+      label: Provenance
+      options:
+        - Original
+        - AI-assisted original
+        - Adapted with attribution
+        - External reference
+    validations:
+      required: true
+  - type: input
+    id: public_source
+    attributes:
+      label: Public source, when applicable
+      description: Link only to material that is already intentionally public.
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Publication boundary
+      options:
+        - label: I have not included private or employer-confidential source material.
+          required: true
+        - label: I understand that passing an automated scan does not replace human sanitization review.
+          required: true
