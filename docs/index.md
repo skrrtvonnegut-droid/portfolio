@@ -8,6 +8,15 @@ That means reducing hidden dependencies, tightening identity and access controls
 
 ## Published evidence
 
+### Public projects and architecture
+
+- [Microsoft 365 License Report](projects/m365-license-report.md) — PowerShell and Microsoft Graph reporting for license assignment, activity, cost signals, and governance review.
+- [Prompt Library](projects/prompt-library.md) — a versioned registry for prompts, skills, macros, stable identity, routing metadata, and validation.
+- [The People’s Grimoire](projects/the-peoples-grimoire.md) — open-source interoperability architecture built around connector contracts, policy, provenance, privacy, and human authority.
+- [Living Professional Portfolio Architecture](methodology/living-professional-portfolio.md) — the review-gated system that turns private professional evidence into attributable, validated public artifacts.
+
+### Operational case studies and patterns
+
 - [Privileged Role Activation with Microsoft Entra PIM](artifacts/identity-governance/privileged-role-activation.md) — a pattern for time-bound, auditable administrative elevation.
 - [Staged Windows Update Rollout](artifacts/endpoint-management/staged-windows-update-rollout.md) — a risk-based deployment model using rings, exceptions, telemetry, and rollback criteria.
 - [Service Account Registry and Review System](artifacts/governance/service-account-registry.md) — lifecycle governance for non-human identities, ownership, privilege, and retirement.
@@ -22,6 +31,7 @@ Browse the generated [artifact index](artifact-index.md) for canonical kinds, do
 - **Governance:** ownership, lifecycle controls, review cadence, auditability, and risk reduction
 - **Automation:** practical PowerShell, Python, and workflow design
 - **Documentation:** design documents, runbooks, procedures, knowledge articles, and postmortems
+- **AI systems:** reusable prompt and skill registries, connector contracts, privacy boundaries, and human-governed automation
 - **Learning:** experiments that become durable technical capability rather than disposable notes
 
 ## Evidence, not theater
