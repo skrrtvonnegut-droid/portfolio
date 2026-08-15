@@ -35,6 +35,8 @@ jobs:
         run: pip install .
 
       - name: Validate public boundary
+        env:
+          PORTFOLIO_DENYLIST: ${{ secrets.PORTFOLIO_DENYLIST }}
         run: |
           python -m scripts.validate_frontmatter docs
           python -m scripts.scan_public_content
