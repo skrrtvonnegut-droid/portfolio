@@ -1,5 +1,5 @@
 ---
-id: portfolio.template.domain.short-name
+id: portfolio.domain.short-name
 slug: /patterns/templates/short-name/
 kind: template
 title: Reusable governance or documentation template
@@ -17,8 +17,8 @@ rights:
   attribution: null
   source_url: null
 review:
-  last_reviewed: 2026-08-15
-  review_due: 2027-02-15
+  last_reviewed: "2026-08-15"
+  review_due: "2027-02-15"
 featured: false
 ---
 
