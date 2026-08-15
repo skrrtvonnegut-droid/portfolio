@@ -10,4 +10,8 @@ Case studies describe sanitized professional work through a consistent structure
 
 Raw internal documentation is not copied here. Exact names, production values, architecture identifiers, and private evidence are replaced with synthetic examples or expressed as reusable decision patterns.
 
-No historical case studies have been published yet. They will arrive through small, separately reviewed pull requests.
+## Published case studies
+
+### [Service Account Registry and Review System](identity/service-account-registry.md)
+
+A governance design for moving non-human identities from an ambiguous inventory into an owned, reviewable lifecycle of classification, control assessment, attestation, remediation, and retirement.
