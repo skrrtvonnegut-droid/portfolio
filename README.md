@@ -7,7 +7,7 @@ A living professional portfolio focused on Microsoft 365 administration, identit
 I work where systems, people, and process collide: reducing repetitive administration, making access and ownership visible, designing safer change paths, and converting tribal knowledge into operations that can survive handoffs, incidents, and growth.
 
 > [!IMPORTANT]
-> This repository is a **published evidence layer**, not a dump of workplace documents, Notion pages, or private conversations. Every artifact is reconstructed, generalized, checked for confidentiality, and reviewed through a pull request before publication.
+> This repository is a **published evidence layer**, not a dump of workplace documents, Notion pages, or private conversations. Every artifact is reconstructed, generalized, attributed, checked for confidentiality, and reviewed through a pull request before publication.
 
 ## What this portfolio demonstrates
 
@@ -46,7 +46,7 @@ flowchart LR
     C -->|No| D[Remain private or ephemeral]
     C -->|Yes| E[Reconstruct and sanitize]
     E --> F[Draft pull request]
-    F --> G[Schema, privacy, link, test, and Zensical build checks]
+    F --> G[Schema, provenance, rights, privacy, link, test, and strict build checks]
     G --> H{Human review}
     H -->|Revise| E
     H -->|Approve| I[Merge to main]
@@ -57,26 +57,41 @@ The discovery step can occur naturally during active ChatGPT work. Publication i
 
 Read the full [Publishing and Artifact Standard](docs/methodology/publishing.md).
 
+## Artifact contract
+
+Artifact metadata has two public parts:
+
+- Narrative metadata lives beside each document under `docs/artifacts/`.
+- Provenance, authorship, publication rights, public slug, featured state, and review dates live in the `artifacts` register in `portfolio.yml`.
+
+The validator merges both records by stable artifact ID and rejects missing, duplicate, conflicting, orphaned, or overdue entries. Private source mappings and approval state remain outside GitHub.
+
 ## Local validation and preview
 
 ```bash
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
-python -m pip install -r requirements.txt
+python -m pip install -r requirements-dev.txt
 python scripts/portfolio.py validate
+python scripts/portfolio.py review-dates
+python scripts/portfolio.py links
+ruff check scripts tests
 python -m unittest discover -s tests
-zensical build --clean
+zensical build --clean --strict
 python scripts/portfolio.py catalog --output site/catalog.json
 zensical serve
 ```
 
+Use `python scripts/portfolio.py links --external` when network access is available. Transient network failures are warnings; confirmed missing public pages block the check.
+
 ## Add an artifact
 
-1. Start from [the artifact template](templates/ARTIFACT_TEMPLATE.md) or open a **Portfolio candidate** issue with public-safe metadata only.
-2. Place the Markdown file under `docs/artifacts/<domain>/`.
-3. Complete the YAML metadata block.
-4. Run the validation, test, and build commands above.
-5. Open a draft pull request. Merge only after the privacy, provenance, and source-rights checklist passes.
+1. Register and review the candidate in the private portfolio control plane.
+2. Start from [the artifact template](templates/ARTIFACT_TEMPLATE.md).
+3. Place the reconstructed Markdown file under `docs/artifacts/<domain>/`.
+4. Add its public governance record to `portfolio.yml`.
+5. Run the validation, test, link, and strict-build commands above.
+6. Open a draft pull request. Merge only after the privacy, provenance, rights, and technical-review checklist passes.
 
 ## Repository structure
 
@@ -87,13 +102,28 @@ portfolio/
 │   ├── methodology/            # Publishing and review contract
 │   └── stylesheets/            # Presentation overrides
 ├── templates/                  # Reusable artifact scaffolding
-├── schema/                     # Machine-readable metadata validation
-├── scripts/                    # Validation, privacy scanning, and catalog generation
-├── tests/                      # Publication-boundary tests
-├── portfolio.yml               # Profile and featured-project manifest
-├── zensical.toml               # Site and navigation configuration
-└── .github/                    # CI/CD, issue intake, and PR controls
+├── schema/                     # Merged metadata contract
+├── scripts/                    # Validation, scanning, review, links, and catalog generation
+├── tests/                      # Publication-boundary regression tests
+├── portfolio.yml               # Profile, projects, and public artifact governance
+├── zensical.toml               # Site, strict-link, and navigation configuration
+└── .github/                    # CI/CD, maintenance, issue intake, and PR controls
 ```
+
+## CI/CD controls
+
+Pull requests run:
+
+- schema and semantic metadata validation;
+- private-reference and environment-specific denylist scanning;
+- Gitleaks secret-history scanning;
+- public review-date checks;
+- external-link health checks;
+- Ruff and unit tests;
+- a strict Zensical build;
+- deterministic machine-readable catalog generation.
+
+Merge to `main` is the only deployment trigger. Monthly maintenance checks drift and opens an issue rather than silently rewriting authored content.
 
 ## Privacy boundary
 

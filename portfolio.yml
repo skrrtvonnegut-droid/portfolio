@@ -23,3 +23,68 @@ projects:
     url: "https://github.com/skrrtvonnegut-droid/the-peoples-grimoire"
     summary: "Open-source architecture for user-owned, policy-governed coordination across SaaS tools."
     tags: ["Architecture", "Interoperability", "Privacy", "Open source"]
+
+# Public governance metadata is kept separate from narrative front matter so
+# review, provenance, and rights can be maintained as one auditable register.
+# Private source mappings and approval state remain in Notion.
+artifacts:
+  - id: portfolio.identity.privileged-role-activation
+    slug: /artifacts/identity-governance/privileged-role-activation/
+    provenance: ai-assisted-original
+    authorship: breezy-lynne
+    rights:
+      publishable: true
+      attribution: null
+      source_url: null
+    review:
+      last_reviewed: 2026-08-15
+      review_due: 2027-02-15
+    featured: false
+  - id: portfolio.endpoint.staged-windows-update-rollout
+    slug: /artifacts/endpoint-management/staged-windows-update-rollout/
+    provenance: ai-assisted-original
+    authorship: breezy-lynne
+    rights:
+      publishable: true
+      attribution: null
+      source_url: null
+    review:
+      last_reviewed: 2026-08-15
+      review_due: 2027-02-15
+    featured: false
+  - id: portfolio.identity.service-account-registry
+    slug: /artifacts/governance/service-account-registry/
+    provenance: ai-assisted-original
+    authorship: breezy-lynne
+    rights:
+      publishable: true
+      attribution: null
+      source_url: null
+    review:
+      last_reviewed: 2026-08-15
+      review_due: 2027-02-15
+    featured: true
+  - id: portfolio.service.mail-flow-change-after-action
+    slug: /artifacts/service-management/mail-flow-change-after-action/
+    provenance: ai-assisted-original
+    authorship: breezy-lynne
+    rights:
+      publishable: true
+      attribution: null
+      source_url: null
+    review:
+      last_reviewed: 2026-08-15
+      review_due: 2027-02-15
+    featured: true
+  - id: portfolio.knowledge.operational-documentation-system
+    slug: /artifacts/knowledge-management/operational-documentation-system/
+    provenance: ai-assisted-original
+    authorship: breezy-lynne
+    rights:
+      publishable: true
+      attribution: null
+      source_url: null
+    review:
+      last_reviewed: 2026-08-15
+      review_due: 2027-02-15
+    featured: true

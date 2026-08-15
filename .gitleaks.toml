@@ -1,0 +1,12 @@
+title = "Portfolio secret-scanning configuration"
+
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Generated site output and local caches are never committed."
+paths = [
+  '''^site/''',
+  '''^\.pytest_cache/''',
+  '''^\.ruff_cache/''',
+]

@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: portfolio-validate
+        name: Validate portfolio publication boundary
+        entry: python scripts/portfolio.py validate
+        language: system
+        pass_filenames: false
+      - id: portfolio-review-dates
+        name: Check portfolio review dates
+        entry: python scripts/portfolio.py review-dates
+        language: system
+        pass_filenames: false
+      - id: portfolio-links
+        name: Check public link syntax
+        entry: python scripts/portfolio.py links
+        language: system
+        pass_filenames: false
+      - id: portfolio-ruff
+        name: Lint portfolio tooling
+        entry: ruff check scripts tests
+        language: system
+        pass_filenames: false

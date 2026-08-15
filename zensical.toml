@@ -23,6 +23,10 @@ nav = [
   { "Publishing standard" = "methodology/publishing.md" },
 ]
 
+[project.validation]
+invalid_links = true
+invalid_link_anchors = true
+
 [project.theme]
 features = [
   "navigation.instant",

@@ -1,10 +1,12 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://example.invalid/portfolio/artifact.schema.json",
+  "$id": "https://skrrtvonnegut-droid.github.io/portfolio/schema/artifact.schema.json",
   "title": "Professional Portfolio Artifact",
+  "description": "Merged public contract for artifact content metadata and governance metadata.",
   "type": "object",
   "required": [
     "id",
+    "slug",
     "title",
     "summary",
     "artifact_type",
@@ -14,12 +16,21 @@
     "source_disclosure",
     "skills",
     "created",
-    "updated"
+    "updated",
+    "provenance",
+    "authorship",
+    "rights",
+    "review",
+    "featured"
   ],
   "properties": {
     "id": {
       "type": "string",
       "pattern": "^portfolio\\.[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^/artifacts/[a-z0-9]+(?:[/-][a-z0-9]+)*/$"
     },
     "title": {
       "type": "string",
@@ -39,8 +50,11 @@
         "code-project",
         "knowledge-article",
         "learning-note",
+        "project-card",
         "runbook",
-        "sop"
+        "sop",
+        "technical-pattern",
+        "template"
       ]
     },
     "domains": {
@@ -49,16 +63,20 @@
       "uniqueItems": true,
       "items": {
         "type": "string",
-        "pattern": "^[a-z0-9-]+$"
+        "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
       }
     },
     "status": {
       "type": "string",
-      "enum": ["draft", "active", "review-due", "superseded", "archived"]
+      "enum": [
+        "active",
+        "review-due",
+        "superseded",
+        "archived"
+      ]
     },
     "classification": {
-      "type": "string",
-      "enum": ["public", "professional-portfolio"]
+      "const": "professional-portfolio"
     },
     "source_disclosure": {
       "type": "string",
@@ -82,6 +100,67 @@
     "updated": {
       "type": "string",
       "format": "date"
+    },
+    "provenance": {
+      "enum": [
+        "original",
+        "ai-assisted-original",
+        "adapted",
+        "external-reference"
+      ]
+    },
+    "authorship": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+    },
+    "rights": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "publishable",
+        "attribution",
+        "source_url"
+      ],
+      "properties": {
+        "publishable": {
+          "const": true
+        },
+        "attribution": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 3
+        },
+        "source_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "uri"
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "last_reviewed",
+        "review_due"
+      ],
+      "properties": {
+        "last_reviewed": {
+          "type": "string",
+          "format": "date"
+        },
+        "review_due": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "featured": {
+      "type": "boolean"
     }
   },
   "additionalProperties": false

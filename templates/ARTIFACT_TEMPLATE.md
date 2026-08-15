@@ -5,7 +5,7 @@ summary: One sentence describing the problem and professional capability.
 artifact_type: case-study
 domains:
   - domain-name
-status: draft
+status: active
 classification: professional-portfolio
 source_disclosure: Reconstructed from professional experience; no private implementation details are included.
 skills:
@@ -59,3 +59,25 @@ Connect the artifact to professional capabilities, tools, and systems thinking.
 ## References
 
 Link only public sources or intentionally public repositories. Preserve attribution and licensing requirements.
+
+---
+
+Add a matching public governance record to `portfolio.yml` before validation:
+
+```yaml
+artifacts:
+  - id: portfolio.domain.short-slug
+    slug: /artifacts/domain/short-slug/
+    provenance: ai-assisted-original
+    authorship: breezy-lynne
+    rights:
+      publishable: true
+      attribution: null
+      source_url: null
+    review:
+      last_reviewed: 2026-08-15
+      review_due: 2027-02-15
+    featured: false
+```
+
+Draft state belongs to the branch and pull request. Use only public lifecycle states in artifact metadata.
