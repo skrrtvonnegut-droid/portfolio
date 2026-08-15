@@ -1,0 +1,37 @@
+:root {
+  --md-primary-fg-color: #365f5b;
+  --md-primary-fg-color--light: #5e8b84;
+  --md-primary-fg-color--dark: #274945;
+  --md-accent-fg-color: #4d7a73;
+}
+
+.md-grid {
+  max-width: 76rem;
+}
+
+.md-typeset h1,
+.md-typeset h2,
+.md-typeset h3 {
+  letter-spacing: -0.025em;
+}
+
+.md-typeset h1 {
+  font-weight: 750;
+}
+
+.md-typeset h2 {
+  font-weight: 700;
+}
+
+.md-typeset table:not([class]) th {
+  font-weight: 700;
+}
+
+.md-typeset .admonition.abstract,
+.md-typeset details.abstract {
+  border-color: var(--md-primary-fg-color);
+}
+
+.md-typeset .md-button {
+  border-radius: 999px;
+}

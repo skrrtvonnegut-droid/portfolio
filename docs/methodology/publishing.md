@@ -81,7 +81,7 @@ CI enforces:
 - minimum content quality checks;
 - generic secret and private-infrastructure scanning;
 - optional repository-specific denylist scanning through the `PORTFOLIO_DENYLIST` secret;
-- successful catalog and site generation;
+- successful Zensical site and catalog generation;
 - unit tests.
 
 CI reduces risk; it does not replace human judgment.
@@ -137,7 +137,7 @@ An artifact that says only “I improved security” is safe but useless. An art
 
 ## Artifact metadata contract
 
-Every file under `artifacts/` begins with YAML front matter:
+Every file under `docs/artifacts/` begins with YAML front matter:
 
 ```yaml
 ---
@@ -156,6 +156,7 @@ created: 2026-08-15
 updated: 2026-08-15
 ---
 ```
+
 
 ### Stable identity
 

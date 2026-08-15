@@ -1,13 +1,13 @@
 # Breezy Lynne — Systems, Identity & Automation
 
-[![Portfolio CI](https://github.com/skrrtvonnegut-droid/portfolio/actions/workflows/portfolio.yml/badge.svg)](https://github.com/skrrtvonnegut-droid/portfolio/actions/workflows/portfolio.yml)
+[![Portfolio CI/CD](https://github.com/skrrtvonnegut-droid/portfolio/actions/workflows/portfolio.yml/badge.svg)](https://github.com/skrrtvonnegut-droid/portfolio/actions/workflows/portfolio.yml)
 
 A living professional portfolio focused on Microsoft 365 administration, identity governance, endpoint management, automation, operational resilience, and technical knowledge design.
 
 I work where systems, people, and process collide: reducing repetitive administration, making access and ownership visible, designing safer change paths, and converting tribal knowledge into operations that can survive handoffs, incidents, and growth.
 
 > [!IMPORTANT]
-> This repository is a **published evidence layer**, not a dump of workplace documents or private conversations. Every artifact is reconstructed, generalized, and checked for confidentiality before publication.
+> This repository is a **published evidence layer**, not a dump of workplace documents, Notion pages, or private conversations. Every artifact is reconstructed, generalized, checked for confidentiality, and reviewed through a pull request before publication.
 
 ## What this portfolio demonstrates
 
@@ -29,15 +29,15 @@ I work where systems, people, and process collide: reducing repetitive administr
 
 | Domain | Artifact |
 | --- | --- |
-| Identity governance | [Privileged Role Activation with Microsoft Entra PIM](artifacts/identity-governance/privileged-role-activation.md) |
-| Endpoint management | [Staged Windows Update Rollout](artifacts/endpoint-management/staged-windows-update-rollout.md) |
-| Identity governance | [Service Account Registry and Review System](artifacts/governance/service-account-registry.md) |
-| Service management | [Mail-Flow Change After-Action Review](artifacts/service-management/mail-flow-change-after-action.md) |
-| Knowledge management | [Operational Documentation System](artifacts/knowledge-management/operational-documentation-system.md) |
+| Identity governance | [Privileged Role Activation with Microsoft Entra PIM](docs/artifacts/identity-governance/privileged-role-activation.md) |
+| Endpoint management | [Staged Windows Update Rollout](docs/artifacts/endpoint-management/staged-windows-update-rollout.md) |
+| Identity governance | [Service Account Registry and Review System](docs/artifacts/governance/service-account-registry.md) |
+| Service management | [Mail-Flow Change After-Action Review](docs/artifacts/service-management/mail-flow-change-after-action.md) |
+| Knowledge management | [Operational Documentation System](docs/artifacts/knowledge-management/operational-documentation-system.md) |
 
 These are not verbatim employer procedures. They preserve the transferable problem-solving pattern—context, decisions, controls, trade-offs, validation, and outcomes—while omitting organization-specific implementation details.
 
-## How the living pipeline works
+## Publishing architecture
 
 ```mermaid
 flowchart LR
@@ -46,45 +46,53 @@ flowchart LR
     C -->|No| D[Remain private or ephemeral]
     C -->|Yes| E[Reconstruct and sanitize]
     E --> F[Draft pull request]
-    F --> G[Schema, link, privacy, and build checks]
+    F --> G[Schema, privacy, link, test, and Zensical build checks]
     G --> H{Human review}
     H -->|Revise| E
     H -->|Approve| I[Merge to main]
-    I --> J[Catalog and GitHub Pages deployment]
+    I --> J[GitHub Pages deployment]
 ```
 
-The discovery step can happen naturally during active ChatGPT work. Publication is intentionally review-gated: no automation may copy raw Notion pages, chat history, tickets, screenshots, or internal configuration into this public repository.
+The discovery step can occur naturally during active ChatGPT work. Publication is intentionally review-gated: no automation may copy raw Notion pages, chat history, tickets, screenshots, or internal configuration into this public repository.
 
-Read the full [Publishing and Artifact Standard](docs/PUBLISHING.md).
+Read the full [Publishing and Artifact Standard](docs/methodology/publishing.md).
+
+## Local validation and preview
+
+```bash
+python -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+python -m pip install -r requirements.txt
+python scripts/portfolio.py validate
+python -m unittest discover -s tests
+zensical build --clean
+python scripts/portfolio.py catalog --output site/catalog.json
+zensical serve
+```
 
 ## Add an artifact
 
-1. Start from [the artifact template](templates/ARTIFACT_TEMPLATE.md) or open a **Portfolio candidate** issue.
-2. Place the Markdown file under `artifacts/<domain>/`.
+1. Start from [the artifact template](templates/ARTIFACT_TEMPLATE.md) or open a **Portfolio candidate** issue with public-safe metadata only.
+2. Place the Markdown file under `docs/artifacts/<domain>/`.
 3. Complete the YAML metadata block.
-4. Run the same checks used by CI:
-
-   ```bash
-   python -m pip install -r requirements.txt
-   python scripts/portfolio.py validate
-   python -m unittest discover -s tests
-   python scripts/portfolio.py build --output _site
-   ```
-
-5. Open a draft pull request. Merge only after the privacy and source-rights checklist passes.
+4. Run the validation, test, and build commands above.
+5. Open a draft pull request. Merge only after the privacy, provenance, and source-rights checklist passes.
 
 ## Repository structure
 
 ```text
 portfolio/
-├── artifacts/                 # Sanitized professional evidence
-├── docs/PUBLISHING.md         # Promotion, privacy, and metadata contract
-├── templates/                 # Reusable artifact scaffolding
-├── schema/                    # Machine-readable metadata validation
-├── scripts/                   # Validation, scanning, catalog, and site build
-├── tests/                     # Pipeline tests
-├── portfolio.yml              # Profile and featured-project manifest
-└── .github/                   # CI/CD, issue intake, and PR controls
+├── docs/                       # Zensical site sources and sanitized artifacts
+│   ├── artifacts/              # Public professional evidence
+│   ├── methodology/            # Publishing and review contract
+│   └── stylesheets/            # Presentation overrides
+├── templates/                  # Reusable artifact scaffolding
+├── schema/                     # Machine-readable metadata validation
+├── scripts/                    # Validation, privacy scanning, and catalog generation
+├── tests/                      # Publication-boundary tests
+├── portfolio.yml               # Profile and featured-project manifest
+├── zensical.toml               # Site and navigation configuration
+└── .github/                    # CI/CD, issue intake, and PR controls
 ```
 
 ## Privacy boundary

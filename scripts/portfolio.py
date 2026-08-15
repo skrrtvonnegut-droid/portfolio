@@ -1,30 +1,30 @@
 #!/usr/bin/env python3
-"""Validate portfolio artifacts and build a dependency-light static site."""
+"""Validate public portfolio artifacts and generate a machine-readable catalog."""
 
 from __future__ import annotations
 
 import argparse
 import datetime as dt
-import html
 import json
 import os
 import re
-import shutil
 import sys
+import tomllib
 from dataclasses import dataclass
 from pathlib import Path
-from tempfile import TemporaryDirectory
 from typing import Any, Iterable
 
 import jsonschema
-import mistune
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-ARTIFACT_ROOT = ROOT / "artifacts"
+DOCS_ROOT = ROOT / "docs"
+ARTIFACT_ROOT = DOCS_ROOT / "artifacts"
 SCHEMA_PATH = ROOT / "schema" / "artifact.schema.json"
 MANIFEST_PATH = ROOT / "portfolio.yml"
-STYLE_PATH = ROOT / "assets" / "style.css"
+CONFIG_PATH = ROOT / "zensical.toml"
+STYLE_PATH = DOCS_ROOT / "stylesheets" / "extra.css"
+INDEX_PATH = DOCS_ROOT / "index.md"
 
 MARKDOWN_LINK = re.compile(r"!?(?:\[[^\]]*\])\(([^)]+)\)")
 
@@ -34,14 +34,31 @@ SECURITY_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ("AWS access key", re.compile(r"\bAKIA[0-9A-Z]{16}\b")),
     ("JWT-like token", re.compile(r"\beyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\b")),
     ("email address", re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.IGNORECASE)),
-    ("private IPv4 address", re.compile(r"\b(?:10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2})\b")),
+    (
+        "private IPv4 address",
+        re.compile(
+            r"\b(?:10(?:\.\d{1,3}){3}|192\.168(?:\.\d{1,3}){2}|172\.(?:1[6-9]|2\d|3[01])(?:\.\d{1,3}){2})\b"
+        ),
+    ),
     ("internal DNS suffix", re.compile(r"\b[a-z0-9][a-z0-9.-]*\.(?:corp|internal|local)\b", re.IGNORECASE)),
     ("tenant-specific cloud domain", re.compile(r"\b[a-z0-9-]+\.onmicrosoft\.com\b", re.IGNORECASE)),
-    ("private SharePoint link", re.compile(r"https://[^\s)]+\.sharepoint\.com/(?:sites|personal)/[^\s)]*", re.IGNORECASE)),
-    ("private Notion page link", re.compile(r"https://(?:www\.)?notion\.(?:so|site)/[^\s)]*[0-9a-f]{24,}", re.IGNORECASE)),
+    (
+        "private SharePoint link",
+        re.compile(r"https://[^\s)]+\.sharepoint\.com/(?:sites|personal)/[^\s)]*", re.IGNORECASE),
+    ),
+    (
+        "private Notion page link",
+        re.compile(r"https://(?:www\.|app\.)?notion\.(?:so|site|com)/[^\s)]*[0-9a-f]{24,}", re.IGNORECASE),
+    ),
     ("UNC path", re.compile(r"(?<!`)\\\\[A-Za-z0-9_.-]+\\[A-Za-z0-9_$.-]+")),
     ("service-management record", re.compile(r"\b(?:INC|REQ|RITM|CHG|PRB)\d{5,}\b", re.IGNORECASE)),
-    ("GUID", re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b", re.IGNORECASE)),
+    (
+        "GUID",
+        re.compile(
+            r"\b[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}\b",
+            re.IGNORECASE,
+        ),
+    ),
     (
         "credential assignment",
         re.compile(
@@ -51,8 +68,8 @@ SECURITY_PATTERNS: tuple[tuple[str, re.Pattern[str]], ...] = (
     ),
 )
 
-PUBLISHABLE_SUFFIXES = {".md", ".yml", ".yaml", ".json", ".html", ".css"}
-IGNORED_PARTS = {".git", "_site", ".venv", "__pycache__"}
+PUBLISHABLE_SUFFIXES = {".md", ".yml", ".yaml", ".json", ".toml", ".html", ".css", ".txt"}
+IGNORED_PARTS = {".git", ".venv", "site", "__pycache__", ".pytest_cache"}
 
 
 @dataclass(frozen=True)
@@ -105,6 +122,10 @@ def iter_artifact_paths() -> Iterable[Path]:
 
 def load_schema() -> dict[str, Any]:
     return json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+
+
+def load_artifacts() -> list[Artifact]:
+    return [parse_artifact(path) for path in iter_artifact_paths()]
 
 
 def public_text_paths() -> Iterable[Path]:
@@ -160,15 +181,44 @@ def check_relative_links(path: Path, text: str) -> list[str]:
     return errors
 
 
+def validate_config() -> list[str]:
+    errors: list[str] = []
+    try:
+        config = tomllib.loads(CONFIG_PATH.read_text(encoding="utf-8"))
+    except (OSError, tomllib.TOMLDecodeError) as exc:
+        return [f"zensical.toml: invalid configuration: {exc}"]
+
+    project = config.get("project")
+    if not isinstance(project, dict):
+        return ["zensical.toml: expected a [project] table"]
+
+    if project.get("docs_dir") != "docs":
+        errors.append("zensical.toml: project.docs_dir must be 'docs'")
+    if project.get("site_dir") != "site":
+        errors.append("zensical.toml: project.site_dir must be 'site'")
+    if not isinstance(project.get("site_name"), str) or not project["site_name"].strip():
+        errors.append("zensical.toml: project.site_name is required")
+    if not isinstance(project.get("site_url"), str) or not project["site_url"].startswith("https://"):
+        errors.append("zensical.toml: project.site_url must be an HTTPS URL")
+    if not isinstance(project.get("nav"), list) or not project["nav"]:
+        errors.append("zensical.toml: project.nav must define at least one page")
+    return errors
+
+
 def validate_repository() -> list[str]:
     errors: list[str] = []
 
-    for required in (SCHEMA_PATH, MANIFEST_PATH, STYLE_PATH):
+    for required in (SCHEMA_PATH, MANIFEST_PATH, CONFIG_PATH, STYLE_PATH, INDEX_PATH):
         if not required.exists():
             errors.append(f"missing required file: {required.relative_to(ROOT)}")
 
+    if (ROOT / "artifacts").exists():
+        errors.append("legacy artifacts/ directory exists; public artifacts must live under docs/artifacts/")
+
     if errors:
         return errors
+
+    errors.extend(validate_config())
 
     schema = load_schema()
     validator = jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker())
@@ -190,7 +240,8 @@ def validate_repository() -> list[str]:
         artifact_id = str(artifact.metadata.get("id", ""))
         if artifact_id in seen_ids:
             errors.append(
-                f"{artifact.relative_path}: duplicate id {artifact_id!r}; first used by {seen_ids[artifact_id].relative_to(ROOT)}"
+                f"{artifact.relative_path}: duplicate id {artifact_id!r}; "
+                f"first used by {seen_ids[artifact_id].relative_to(ROOT)}"
             )
         elif artifact_id:
             seen_ids[artifact_id] = path
@@ -217,7 +268,7 @@ def validate_repository() -> list[str]:
         errors.extend(check_relative_links(path, artifact.body))
 
     if not artifacts:
-        errors.append("no artifacts found under artifacts/")
+        errors.append("no artifacts found under docs/artifacts/")
 
     for path in public_text_paths():
         try:
@@ -241,157 +292,17 @@ def validate_repository() -> list[str]:
     return sorted(set(errors))
 
 
-def load_artifacts() -> list[Artifact]:
-    return [parse_artifact(path) for path in iter_artifact_paths()]
+def catalog_records() -> list[dict[str, Any]]:
+    records: list[dict[str, Any]] = []
+    for artifact in sorted(load_artifacts(), key=lambda item: (item.metadata["domains"][0], item.metadata["title"])):
+        page_path = artifact.path.relative_to(DOCS_ROOT).with_suffix("").as_posix() + "/"
+        records.append({**artifact.metadata, "path": page_path})
+    return records
 
 
-def page_frame(*, title: str, body: str, root_prefix: str = "", description: str = "") -> str:
-    safe_title = html.escape(title)
-    safe_description = html.escape(description or title, quote=True)
-    return f"""<!doctype html>
-<html lang=\"en\">
-<head>
-  <meta charset=\"utf-8\">
-  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">
-  <meta name=\"description\" content=\"{safe_description}\">
-  <title>{safe_title}</title>
-  <link rel=\"stylesheet\" href=\"{root_prefix}assets/style.css\">
-</head>
-<body>
-  <header class=\"site-header\">
-    <div class=\"shell\">
-      <a class=\"brand\" href=\"{root_prefix}index.html\">Breezy Lynne</a>
-      <nav class=\"nav\" aria-label=\"Primary\">
-        <a href=\"{root_prefix}index.html#artifacts\">Artifacts</a>
-        <a href=\"{root_prefix}index.html#projects\">Projects</a>
-        <a href=\"https://github.com/skrrtvonnegut-droid/portfolio\">Repository</a>
-      </nav>
-    </div>
-  </header>
-  {body}
-  <footer class=\"site-footer\">
-    <div class=\"shell\">A living, review-gated professional portfolio. Private source material remains outside this public repository.</div>
-  </footer>
-</body>
-</html>
-"""
-
-
-def chip_list(items: Iterable[str]) -> str:
-    return "".join(f'<span class="chip">{html.escape(str(item))}</span>' for item in items)
-
-
-def build_site(output: Path) -> None:
-    manifest = yaml.safe_load(MANIFEST_PATH.read_text(encoding="utf-8"))
-    site = manifest["site"]
-    projects = manifest["projects"]
-    artifacts = sorted(load_artifacts(), key=lambda item: (item.metadata["domains"][0], item.metadata["title"]))
-
-    if output.exists():
-        shutil.rmtree(output)
-    (output / "assets").mkdir(parents=True, exist_ok=True)
-    shutil.copy2(STYLE_PATH, output / "assets" / "style.css")
-    (output / ".nojekyll").write_text("", encoding="utf-8")
-
-    artifact_cards: list[str] = []
-    catalog: list[dict[str, Any]] = []
-    markdown = mistune.create_markdown(escape=False, plugins=["strikethrough", "table", "task_lists", "url"])
-
-    for artifact in artifacts:
-        relative_source = artifact.path.relative_to(ARTIFACT_ROOT)
-        destination = output / "artifacts" / relative_source.with_suffix(".html")
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        root_prefix = "../" * len(destination.parent.relative_to(output).parts)
-
-        metadata = artifact.metadata
-        rendered = markdown(artifact.body)
-        article = f"""
-<main class=\"article-shell\">
-  <p class=\"eyebrow\">{html.escape(metadata['artifact_type'].replace('-', ' '))}</p>
-  <h1 class=\"article-title\">{html.escape(metadata['title'])}</h1>
-  <p class=\"article-summary\">{html.escape(metadata['summary'])}</p>
-  <div class=\"article-meta chips\">{chip_list(metadata['domains'])}{chip_list(metadata['skills'])}</div>
-  <p class=\"notice\"><strong>Source boundary:</strong> {html.escape(metadata['source_disclosure'])}</p>
-  <article class=\"article-body\">{rendered}</article>
-</main>
-"""
-        destination.write_text(
-            page_frame(
-                title=f"{metadata['title']} — Breezy Lynne",
-                body=article,
-                root_prefix=root_prefix,
-                description=metadata["summary"],
-            ),
-            encoding="utf-8",
-        )
-
-        web_path = destination.relative_to(output).as_posix()
-        artifact_cards.append(
-            f"""
-<article class=\"card\">
-  <p class=\"eyebrow\">{html.escape(metadata['domains'][0].replace('-', ' '))}</p>
-  <a class=\"card-link\" href=\"{html.escape(web_path)}\"><h3>{html.escape(metadata['title'])}</h3></a>
-  <p>{html.escape(metadata['summary'])}</p>
-  <div class=\"chips\">{chip_list(metadata['skills'][:4])}</div>
-</article>
-"""
-        )
-        catalog.append({**metadata, "path": web_path})
-
-    project_cards = "".join(
-        f"""
-<article class=\"card\">
-  <p class=\"eyebrow\">Open-source project</p>
-  <a class=\"card-link\" href=\"{html.escape(project['url'], quote=True)}\"><h3>{html.escape(project['title'])}</h3></a>
-  <p>{html.escape(project['summary'])}</p>
-  <div class=\"chips\">{chip_list(project.get('tags', []))}</div>
-</article>
-"""
-        for project in projects
-    )
-
-    principles = "".join(f"<li>{html.escape(item)}</li>" for item in site.get("principles", []))
-    index_body = f"""
-<main>
-  <section class=\"hero\">
-    <div class=\"shell\">
-      <p class=\"eyebrow\">Systems administration · identity · automation</p>
-      <h1>{html.escape(site['short_title'])}</h1>
-      <p class=\"lede\">{html.escape(site['description'])}</p>
-      <div class=\"actions\">
-        <a class=\"button primary\" href=\"#artifacts\">Explore artifacts</a>
-        <a class=\"button secondary\" href=\"{html.escape(site['profile_url'], quote=True)}\">GitHub profile</a>
-      </div>
-    </div>
-  </section>
-  <section>
-    <div class=\"shell\">
-      <h2>Operating principles</h2>
-      <ul class=\"principles\">{principles}</ul>
-    </div>
-  </section>
-  <section id=\"artifacts\">
-    <div class=\"shell\">
-      <p class=\"eyebrow\">Sanitized professional evidence</p>
-      <h2>Artifacts</h2>
-      <p class=\"lede\">Reconstructed case studies, operating patterns, and technical systems. The transferable reasoning remains; private environments do not.</p>
-      <div class=\"grid\">{''.join(artifact_cards)}</div>
-    </div>
-  </section>
-  <section id=\"projects\">
-    <div class=\"shell\">
-      <p class=\"eyebrow\">Public repositories</p>
-      <h2>Featured projects</h2>
-      <div class=\"grid\">{project_cards}</div>
-    </div>
-  </section>
-</main>
-"""
-    (output / "index.html").write_text(
-        page_frame(title=site["title"], body=index_body, description=site["description"]),
-        encoding="utf-8",
-    )
-    (output / "catalog.json").write_text(json.dumps(catalog, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+def write_catalog(output: Path) -> None:
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(catalog_records(), indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 def command_validate() -> int:
@@ -405,15 +316,15 @@ def command_validate() -> int:
     return 0
 
 
-def command_build(output: Path) -> int:
+def command_catalog(output: Path) -> int:
     errors = validate_repository()
     if errors:
-        print("Build blocked by validation errors:", file=sys.stderr)
+        print("Catalog generation blocked by validation errors:", file=sys.stderr)
         for error in errors:
             print(f"  - {error}", file=sys.stderr)
         return 1
-    build_site(output)
-    print(f"Built static portfolio at {output}")
+    write_catalog(output)
+    print(f"Wrote machine-readable catalog to {output}")
     return 0
 
 
@@ -421,23 +332,14 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     subcommands = parser.add_subparsers(dest="command", required=True)
     subcommands.add_parser("validate", help="Validate metadata, links, privacy patterns, and repository structure")
-    build_parser = subcommands.add_parser("build", help="Build the static portfolio site")
-    build_parser.add_argument("--output", type=Path, default=ROOT / "_site")
-    subcommands.add_parser("check", help="Run validation, tests, and a temporary site build")
+    catalog_parser = subcommands.add_parser("catalog", help="Write a machine-readable artifact catalog")
+    catalog_parser.add_argument("--output", type=Path, default=ROOT / "site" / "catalog.json")
 
     args = parser.parse_args(argv)
     if args.command == "validate":
         return command_validate()
-    if args.command == "build":
-        return command_build(args.output)
-    if args.command == "check":
-        result = command_validate()
-        if result:
-            return result
-        with TemporaryDirectory(prefix="portfolio-build-") as directory:
-            build_site(Path(directory))
-        print("Temporary site build passed.")
-        return 0
+    if args.command == "catalog":
+        return command_catalog(args.output)
     return 2
 
 

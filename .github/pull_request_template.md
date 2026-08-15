@@ -19,7 +19,8 @@
 
 - [ ] `python scripts/portfolio.py validate`
 - [ ] `python -m unittest discover -s tests`
-- [ ] `python scripts/portfolio.py build --output _site`
+- [ ] `zensical build --clean`
+- [ ] `python scripts/portfolio.py catalog --output site/catalog.json`
 - [ ] Technical claims and product behavior reviewed
 - [ ] Public classification confirmed
 

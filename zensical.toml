@@ -1,0 +1,56 @@
+[project]
+site_name = "Breezy Lynne — Systems, Identity & Automation"
+site_description = "A living professional portfolio of Microsoft 365 administration, identity governance, endpoint engineering, automation, service management, and operational knowledge design."
+site_author = "Breezy Lynne"
+site_url = "https://skrrtvonnegut-droid.github.io/portfolio/"
+repo_url = "https://github.com/skrrtvonnegut-droid/portfolio"
+repo_name = "skrrtvonnegut-droid/portfolio"
+edit_uri = "edit/main/docs/"
+copyright = "Built as a review-gated public evidence layer. Private source material remains private."
+docs_dir = "docs"
+site_dir = "site"
+extra_css = ["stylesheets/extra.css"]
+nav = [
+  { "Home" = "index.md" },
+  { "Artifacts" = [
+    { "Privileged role activation" = "artifacts/identity-governance/privileged-role-activation.md" },
+    { "Staged Windows update rollout" = "artifacts/endpoint-management/staged-windows-update-rollout.md" },
+    { "Service account registry" = "artifacts/governance/service-account-registry.md" },
+    { "Mail-flow after-action review" = "artifacts/service-management/mail-flow-change-after-action.md" },
+    { "Operational documentation system" = "artifacts/knowledge-management/operational-documentation-system.md" },
+  ] },
+  { "Projects" = "projects.md" },
+  { "Publishing standard" = "methodology/publishing.md" },
+]
+
+[project.theme]
+features = [
+  "navigation.instant",
+  "navigation.instant.progress",
+  "navigation.tracking",
+  "navigation.sections",
+  "navigation.path",
+  "navigation.top",
+  "navigation.footer",
+  "content.action.view",
+  "content.code.copy",
+  "search.suggest",
+  "search.highlight",
+  "toc.follow",
+]
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+
+[project.markdown_extensions]
+admonition = {}
+attr_list = {}
+md_in_html = {}
+pymdownx.details = {}
+pymdownx.highlight = { anchor_linenums = true }
+pymdownx.inlinehilite = {}
+pymdownx.snippets = {}
+pymdownx.tabbed = { alternate_style = true }
+pymdownx.superfences.custom_fences = [
+  { name = "mermaid", class = "mermaid", format = "pymdownx.superfences.fence_code_format" },
+]
