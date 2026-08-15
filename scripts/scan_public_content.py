@@ -7,9 +7,9 @@ import argparse
 import ipaddress
 import re
 import sys
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 
 from scripts.common import DOCS_ROOT, REPO_ROOT, iter_files, repo_relative
 

@@ -7,9 +7,9 @@ import argparse
 import re
 import sys
 import time
+from collections.abc import Iterable
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
@@ -25,6 +25,8 @@ FAIL_CODES = {404, 410}
 
 @dataclass(frozen=True)
 class LinkReference:
+    """A discovered external Markdown link."""
+
     path: Path
     line: int
     url: str

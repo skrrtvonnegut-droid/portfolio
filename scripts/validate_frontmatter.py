@@ -7,9 +7,10 @@ import argparse
 import json
 import sys
 from collections import defaultdict
+from collections.abc import Iterable
 from datetime import date
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 from jsonschema import Draft202012Validator, FormatChecker
 
