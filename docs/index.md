@@ -6,7 +6,12 @@ I build and administer systems with a simple operational aim:
 
 That means reducing hidden dependencies, tightening identity and access controls, automating repeatable work, documenting the reasoning behind systems, and designing operations that remain understandable after the immediate problem has passed.
 
-## What this portfolio will show
+## Featured work
+
+- [Service Account Registry and Review System](case-studies/identity/service-account-registry.md) — a lifecycle and ownership model for non-human identities
+- [Operational Documentation System](methodology/operational-documentation-system.md) — an architecture for turning working knowledge into the right governed artifact
+
+## What this portfolio shows
 
 - **Systems administration:** Microsoft 365, identity, endpoint, collaboration, and service operations
 - **Governance:** ownership, lifecycle controls, review cadence, auditability, and risk reduction
