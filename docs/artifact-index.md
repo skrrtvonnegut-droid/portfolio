@@ -1,6 +1,9 @@
 <!-- GENERATED: run `python -m scripts.build_artifact_index` -->
 # Artifact index
 
-No portfolio artifacts have been published yet.
+| Artifact | Kind | Domains | Review due |
+| --- | --- | --- | --- |
+| [Service Account Registry and Review System](case-studies/identity/service-account-registry.md) | case study | identity, security, operations | 2027-02-15 |
+| [Operational Documentation System](methodology/operational-documentation-system.md) | architecture | documentation, operations, ai llm | 2027-02-15 |
 
-The repository foundation, schema, publication-boundary controls, and deployment workflow are active. The first artifacts will be introduced through separate reviewed pull requests.
+**Published artifacts:** 2
