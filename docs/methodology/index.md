@@ -71,4 +71,5 @@ Automation may reject a public draft. It may not declare private work safe merel
 
 ## Published methodology
 
+- [Living Professional Portfolio Architecture](living-professional-portfolio.md) — the four-plane, review-gated system connecting private evidence, candidate curation, CI/CD, GitHub Pages, provenance, and lifecycle maintenance.
 - [Operational Documentation System](../artifacts/knowledge-management/operational-documentation-system.md) — deciding whether knowledge belongs in a design document, SOP, runbook, knowledge article, postmortem, or decision record.
