@@ -7,6 +7,14 @@ extend-exclude = ["site"]
 select = ["E", "F", "I", "UP"]
 ignore = ["E501"]
 
+[tool.ruff.lint.isort]
+known-first-party = [
+  "portfolio_common",
+  "portfolio_links",
+  "portfolio_security",
+  "portfolio_validate",
+]
+
 [tool.ruff.format]
 quote-style = "double"
 indent-style = "space"

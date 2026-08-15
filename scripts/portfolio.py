@@ -9,12 +9,12 @@ import json
 import sys
 from pathlib import Path
 
-from portfolio_common import Artifact, LINK_ROOTS, ROOT, iter_artifact_paths, load_artifacts
-from portfolio_links import check_external_links, validate_external_url
-from portfolio_security import scan_text
+from portfolio_common import LINK_ROOTS, ROOT, Artifact as Artifact, iter_artifact_paths, load_artifacts
+from portfolio_links import check_external_links, validate_external_url as validate_external_url
+from portfolio_security import scan_text as scan_text
 from portfolio_validate import (
     find_overdue_reviews,
-    validate_artifact_semantics,
+    validate_artifact_semantics as validate_artifact_semantics,
     validate_repository,
 )
 
