@@ -1,0 +1,99 @@
+name: Portfolio CI/CD
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: portfolio-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  quality:
+    name: Validate, test, and build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install --requirement requirements.txt
+
+      - name: Validate artifacts and privacy boundary
+        env:
+          PORTFOLIO_DENYLIST: ${{ secrets.PORTFOLIO_DENYLIST }}
+        run: python scripts/portfolio.py validate
+
+      - name: Run tests
+        env:
+          PORTFOLIO_DENYLIST: ${{ secrets.PORTFOLIO_DENYLIST }}
+        run: python -m unittest discover -s tests
+
+      - name: Build site preview
+        env:
+          PORTFOLIO_DENYLIST: ${{ secrets.PORTFOLIO_DENYLIST }}
+        run: python scripts/portfolio.py build --output _site
+
+      - name: Upload site preview
+        uses: actions/upload-artifact@v7
+        with:
+          name: portfolio-site-${{ github.run_id }}
+          path: _site
+          if-no-files-found: error
+          retention-days: 14
+
+  deploy:
+    name: Deploy GitHub Pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: quality
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install --requirement requirements.txt
+
+      - name: Build deployable site
+        env:
+          PORTFOLIO_DENYLIST: ${{ secrets.PORTFOLIO_DENYLIST }}
+        run: python scripts/portfolio.py build --output _site
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v6
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: _site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

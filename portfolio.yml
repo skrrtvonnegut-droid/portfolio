@@ -1,0 +1,25 @@
+site:
+  title: "Breezy Lynne — Systems, Identity & Automation"
+  short_title: "Breezy Lynne"
+  description: "A living portfolio of Microsoft 365 administration, identity governance, endpoint engineering, automation, service management, and operational knowledge design."
+  repository_url: "https://github.com/skrrtvonnegut-droid/portfolio"
+  profile_url: "https://github.com/skrrtvonnegut-droid"
+  principles:
+    - "Make tomorrow quieter through repeatable systems."
+    - "Prefer least privilege, visible ownership, and reversible change."
+    - "Turn incident learning into controls, documentation, and automation."
+    - "Preserve the transferable pattern without exposing private systems."
+
+projects:
+  - title: "Microsoft 365 License Report"
+    url: "https://github.com/skrrtvonnegut-droid/M365LicenseReport"
+    summary: "PowerShell and Microsoft Graph reporting for license assignment, usage, cost analysis, and governance."
+    tags: ["PowerShell", "Microsoft Graph", "Microsoft 365", "FinOps"]
+  - title: "Prompt Library"
+    url: "https://github.com/skrrtvonnegut-droid/prompt-library"
+    summary: "A versioned registry of prompts, skills, macros, schemas, validation, and CI for reusable AI-assisted work."
+    tags: ["AI systems", "Prompt engineering", "Schemas", "CI/CD"]
+  - title: "The People’s Grimoire"
+    url: "https://github.com/skrrtvonnegut-droid/the-peoples-grimoire"
+    summary: "Open-source architecture for user-owned, policy-governed coordination across SaaS tools."
+    tags: ["Architecture", "Interoperability", "Privacy", "Open source"]

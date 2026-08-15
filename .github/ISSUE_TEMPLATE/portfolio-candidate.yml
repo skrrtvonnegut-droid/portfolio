@@ -1,0 +1,78 @@
+name: Portfolio candidate
+description: Propose a professional artifact without pasting private source material into the public issue.
+title: "[Candidate] "
+labels: ["portfolio-candidate"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Use this form for the **public-safe summary only**. Keep raw chat, Notion pages, tickets, logs, screenshots, and internal configuration in their approved private systems.
+
+  - type: input
+    id: title
+    attributes:
+      label: Working title
+      placeholder: Staged endpoint deployment case study
+    validations:
+      required: true
+
+  - type: dropdown
+    id: artifact_type
+    attributes:
+      label: Artifact type
+      options:
+        - Architecture
+        - Case study
+        - Code project
+        - Knowledge article
+        - Learning note
+        - Runbook pattern
+        - SOP pattern
+    validations:
+      required: true
+
+  - type: textarea
+    id: capability
+    attributes:
+      label: Capability demonstrated
+      description: Describe the transferable problem, reasoning, controls, and outcome—not the private implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: sanitization
+    attributes:
+      label: Sanitization plan
+      description: List categories that must be removed, generalized, recomputed, or replaced with synthetic examples.
+      placeholder: Organization and people; exact topology; identifiers; private links; policy values; screenshots.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence and validation
+      description: What can be truthfully claimed, and how was it validated?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: classification
+    attributes:
+      label: Intended classification
+      options:
+        - Professional Portfolio
+        - Public
+        - Uncertain — review required
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Public-boundary check
+      options:
+        - label: I did not paste secrets, private source text, production data, internal links, screenshots, identities, or confidential configuration into this issue.
+          required: true
+        - label: I understand that removing names alone is not sufficient sanitization.
+          required: true

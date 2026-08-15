@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/portfolio/artifact.schema.json",
+  "title": "Professional Portfolio Artifact",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "summary",
+    "artifact_type",
+    "domains",
+    "status",
+    "classification",
+    "source_disclosure",
+    "skills",
+    "created",
+    "updated"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^portfolio\\.[a-z0-9-]+(?:\\.[a-z0-9-]+)+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 120
+    },
+    "summary": {
+      "type": "string",
+      "minLength": 40,
+      "maxLength": 240
+    },
+    "artifact_type": {
+      "type": "string",
+      "enum": [
+        "architecture",
+        "case-study",
+        "code-project",
+        "knowledge-article",
+        "learning-note",
+        "runbook",
+        "sop"
+      ]
+    },
+    "domains": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "active", "review-due", "superseded", "archived"]
+    },
+    "classification": {
+      "type": "string",
+      "enum": ["public", "professional-portfolio"]
+    },
+    "source_disclosure": {
+      "type": "string",
+      "minLength": 40,
+      "maxLength": 300
+    },
+    "skills": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 80
+      }
+    },
+    "created": {
+      "type": "string",
+      "format": "date"
+    },
+    "updated": {
+      "type": "string",
+      "format": "date"
+    }
+  },
+  "additionalProperties": false
+}
