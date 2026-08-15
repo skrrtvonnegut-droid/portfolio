@@ -31,6 +31,8 @@ jobs:
         run: python -m scripts.validate_frontmatter docs
 
       - name: Scan public content boundary
+        env:
+          PORTFOLIO_DENYLIST: ${{ secrets.PORTFOLIO_DENYLIST }}
         run: python -m scripts.scan_public_content
 
       - name: Validate project registry
