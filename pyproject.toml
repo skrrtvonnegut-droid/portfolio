@@ -7,6 +7,8 @@ extend-exclude = ["site"]
 select = ["E", "F", "I", "UP"]
 ignore = ["E501"]
 
+# The tooling modules are executed as local scripts, so Ruff must treat them as
+# one first-party package for deterministic import ordering.
 [tool.ruff.lint.isort]
 known-first-party = [
   "portfolio_common",
