@@ -52,3 +52,9 @@ Merge to `main` triggers a clean GitHub Pages build. Monthly maintenance checks 
 ## Human authority
 
 Automation may reject a public draft. It may not declare private work safe merely because no scanner matched it. Classification, contextual sanitization, and final publication remain human decisions.
+
+## Published methodology
+
+### [Operational Documentation System](operational-documentation-system.md)
+
+A practical architecture for deciding whether new knowledge should become a design document, SOP, runbook, knowledge article, decision record, checklist, or after-action review—and for governing that artifact through review and retirement.
