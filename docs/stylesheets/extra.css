@@ -1,0 +1,20 @@
+:root {
+  --portfolio-measure: 46rem;
+}
+
+.md-content__inner {
+  max-width: var(--portfolio-measure);
+}
+
+.md-typeset h1 {
+  font-weight: 650;
+  letter-spacing: -0.025em;
+}
+
+.md-typeset blockquote {
+  font-size: 1.08rem;
+}
+
+.md-typeset table:not([class]) {
+  font-size: 0.78rem;
+}

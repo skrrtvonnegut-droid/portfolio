@@ -1,0 +1,76 @@
+name: Monthly portfolio maintenance
+
+on:
+  schedule:
+    - cron: "17 16 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  maintenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Install
+        run: pip install .
+
+      - name: Run maintenance checks
+        id: checks
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          {
+            echo "# Monthly portfolio maintenance report"
+            echo
+            echo "Generated: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo
+            echo "## Review dates"
+            python -m scripts.check_review_dates
+            review_status=$?
+            echo
+            echo "## External links"
+            python -m scripts.check_links docs README.md CONTRIBUTING.md SECURITY.md --external
+            link_status=$?
+            echo
+            echo "## Public project registry"
+            python -m scripts.verify_projects
+            project_status=$?
+          } > maintenance-report.md 2>&1
+
+          if (( review_status != 0 || link_status != 0 || project_status != 0 )); then
+            exit 1
+          fi
+
+      - name: Open or update maintenance issue
+        if: steps.checks.outcome == 'failure'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          title="Portfolio maintenance review required"
+          existing="$(gh issue list --state open --search "\"$title\" in:title" --json number --jq '.[0].number // empty')"
+
+          if [[ -n "$existing" ]]; then
+            gh issue comment "$existing" --body-file maintenance-report.md
+          else
+            gh issue create --title "$title" --body-file maintenance-report.md
+          fi
+
+      - name: Upload maintenance report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: portfolio-maintenance-report
+          path: maintenance-report.md
+          if-no-files-found: error
+          retention-days: 30

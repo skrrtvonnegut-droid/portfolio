@@ -1,0 +1,23 @@
+repos:
+  - repo: local
+    hooks:
+      - id: portfolio-markdown
+        name: Lint public Markdown
+        entry: python -m scripts.lint_markdown docs templates
+        language: system
+        pass_filenames: false
+      - id: portfolio-frontmatter
+        name: Validate portfolio front matter
+        entry: python -m scripts.validate_frontmatter docs
+        language: system
+        pass_filenames: false
+      - id: portfolio-boundary
+        name: Scan public content boundary
+        entry: python -m scripts.scan_public_content
+        language: system
+        pass_filenames: false
+      - id: portfolio-index
+        name: Verify generated artifact index
+        entry: python -m scripts.build_artifact_index --check
+        language: system
+        pass_filenames: false
