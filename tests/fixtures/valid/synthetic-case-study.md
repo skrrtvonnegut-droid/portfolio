@@ -1,5 +1,5 @@
 ---
-id: portfolio.case-study.identity.synthetic-fixture
+id: portfolio.identity.synthetic-fixture
 slug: /case-studies/identity/synthetic-fixture/
 kind: case-study
 title: Synthetic publication fixture
@@ -17,8 +17,8 @@ rights:
   attribution: null
   source_url: null
 review:
-  last_reviewed: 2026-08-15
-  review_due: 2027-02-15
+  last_reviewed: "2026-08-15"
+  review_due: "2027-02-15"
 featured: false
 ---
 
