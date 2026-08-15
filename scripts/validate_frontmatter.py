@@ -16,6 +16,7 @@ import yaml
 from jsonschema import Draft202012Validator, FormatChecker
 
 from scripts.common import (
+    ARTIFACT_DIRECTORIES,
     ARTIFACT_REGISTRY_PATH,
     DOCS_ROOT,
     SCHEMA_PATH,
@@ -100,14 +101,21 @@ def load_artifact_registry(
             continue
 
         parsed_path = PurePosixPath(public_path)
+        valid_family = (
+            len(parsed_path.parts) >= 3
+            and parsed_path.parts[0] == "docs"
+            and parsed_path.parts[1] in ARTIFACT_DIRECTORIES
+        )
         if (
             parsed_path.is_absolute()
             or ".." in parsed_path.parts
-            or not public_path.startswith("docs/artifacts/")
+            or not valid_family
             or parsed_path.suffix != ".md"
         ):
+            families = ", ".join(sorted(ARTIFACT_DIRECTORIES))
             errors.append(
-                f"{label}.path: must identify a Markdown file beneath docs/artifacts/"
+                f"{label}.path: must identify a Markdown file beneath an approved "
+                f"docs artifact family ({families})"
             )
             continue
         if public_path in records:
