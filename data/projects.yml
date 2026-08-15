@@ -1,2 +1,20 @@
 schema_version: 1
-projects: []
+projects:
+  - id: m365-license-report
+    title: Microsoft 365 License Report
+    summary: PowerShell and Microsoft Graph reporting for license assignment, usage, cost signals, and governance review.
+    repository_url: https://github.com/skrrtvonnegut-droid/M365LicenseReport
+    provenance: adapted
+    status: active
+  - id: prompt-library
+    title: Prompt Library
+    summary: A versioned registry of prompts, skills, macros, schemas, validation, and routing metadata for reusable AI-assisted workflows.
+    repository_url: https://github.com/skrrtvonnegut-droid/prompt-library
+    provenance: ai-assisted-original
+    status: active
+  - id: the-peoples-grimoire
+    title: The People’s Grimoire
+    summary: Open-source architecture for user-owned, policy-governed coordination across SaaS tools with explicit privacy and human authority.
+    repository_url: https://github.com/skrrtvonnegut-droid/the-peoples-grimoire
+    provenance: ai-assisted-original
+    status: experimental

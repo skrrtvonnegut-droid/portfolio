@@ -144,3 +144,117 @@ artifacts:
         last_reviewed: "2026-08-15"
         review_due: "2027-02-15"
       featured: true
+  - path: docs/projects/m365-license-report.md
+    source_id: portfolio.project-card.m365-license-report
+    metadata:
+      id: portfolio.project-card.m365-license-report
+      slug: /projects/m365-license-report/
+      kind: project-card
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - microsoft-365
+        - automation
+        - operations
+      skills:
+        - powershell
+        - microsoft-graph
+        - license-governance
+        - reporting
+        - data-analysis
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: true
+  - path: docs/projects/prompt-library.md
+    source_id: portfolio.project-card.prompt-library
+    metadata:
+      id: portfolio.project-card.prompt-library
+      slug: /projects/prompt-library/
+      kind: project-card
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - ai-llm
+        - documentation
+        - automation
+      skills:
+        - ai-workflow-architecture
+        - schema-design
+        - technical-writing
+        - governance
+        - ci-validation
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: true
+  - path: docs/projects/the-peoples-grimoire.md
+    source_id: portfolio.project-card.the-peoples-grimoire
+    metadata:
+      id: portfolio.project-card.the-peoples-grimoire
+      slug: /projects/the-peoples-grimoire/
+      kind: project-card
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - ai-llm
+        - automation
+        - operations
+        - documentation
+      skills:
+        - systems-architecture
+        - connector-design
+        - policy-modeling
+        - privacy-engineering
+        - technical-writing
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: true
+  - path: docs/methodology/living-professional-portfolio.md
+    source_id: portfolio.architecture.ai-llm.living-professional-portfolio
+    metadata:
+      id: portfolio.architecture.ai-llm.living-professional-portfolio
+      slug: /methodology/living-professional-portfolio/
+      kind: architecture
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - ai-llm
+        - automation
+        - documentation
+        - career
+      skills:
+        - systems-architecture
+        - ci-cd
+        - data-classification
+        - provenance-modeling
+        - knowledge-architecture
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: true
