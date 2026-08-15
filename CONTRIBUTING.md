@@ -14,6 +14,12 @@ Never include:
 
 When proposing content, state whether it is original, AI-assisted original, adapted, or an external reference.
 
+## Stable artifact identity
+
+Use `portfolio.<domain>.<slug>` for every durable artifact ID, for example `portfolio.identity.service-account-registry`.
+
+The ID describes the enduring subject of the work rather than its presentation type. Keep `kind` as separate metadata so a learning note can mature into a case study or architecture without losing its identity. Public paths and titles may also change while the stable ID remains fixed.
+
 ## Pull requests
 
 A pull request should:
