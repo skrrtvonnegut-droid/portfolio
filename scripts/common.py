@@ -13,7 +13,9 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 DOCS_ROOT = REPO_ROOT / "docs"
 SCHEMA_PATH = REPO_ROOT / "schemas" / "portfolio-artifact.schema.json"
 ARTIFACT_INDEX_PATH = DOCS_ROOT / "artifact-index.md"
+ARTIFACT_REGISTRY_PATH = REPO_ROOT / "data" / "artifacts.yml"
 ARTIFACT_DIRECTORIES = {
+    "artifacts",
     "case-studies",
     "patterns",
     "projects",
