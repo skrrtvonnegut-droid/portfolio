@@ -1,13 +1,13 @@
 # Projects
 
-Project cards will provide a curated narrative for public repositories while leaving code and canonical documentation in their original homes.
+Project cards provide a curated narrative for public repositories while leaving executable code, schemas, and canonical documentation in their original homes.
 
-A project card should explain:
+They focus on the problem, important design choices, demonstrated capabilities, current maturity, and the boundary between the public project and any private deployment context.
 
-- The problem the project addresses
-- The design and operational choices that matter
-- The capabilities demonstrated
-- Current maturity and limitations
-- Where to inspect the canonical implementation
+## Published project cards
 
-The project registry is intentionally empty during the foundation release. Existing repositories will be added through later portfolio-review pull requests rather than copied automatically.
+- [Microsoft 365 License Report](m365-license-report.md) — PowerShell and Microsoft Graph reporting for license assignment, usage, cost signals, and governance review.
+- [Prompt Library](prompt-library.md) — a versioned registry for prompts, skills, macros, stable identity, routing metadata, and validation.
+- [The People’s Grimoire](the-peoples-grimoire.md) — user-owned interoperability architecture built around connector contracts, policy, provenance, privacy, and human authority.
+
+Each card links to the canonical public repository rather than copying its implementation into the portfolio.
