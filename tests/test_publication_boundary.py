@@ -10,7 +10,7 @@ import yaml
 
 from scripts.build_artifact_index import render_index
 from scripts.check_review_dates import find_overdue
-from scripts.scan_public_content import scan_text
+from scripts.scan_public_content import load_custom_denylist, scan_text
 from scripts.validate_frontmatter import load_validator, validate_metadata
 from scripts.verify_projects import validate_registry
 
@@ -79,6 +79,24 @@ def test_scanner_rejects_email_address(tmp_path: Path) -> None:
 def test_scanner_rejects_private_metadata_key(tmp_path: Path) -> None:
     findings = scan_text(tmp_path / "page.md", "# Example\n\nsource_references: hidden\n")
     assert any("private metadata key" in finding.rule for finding in findings)
+
+
+def test_scanner_rejects_custom_term_without_disclosing_it(tmp_path: Path) -> None:
+    private_term = "SyntheticInternalName"
+    findings = scan_text(
+        tmp_path / "page.md",
+        f"# Example\n\nA reference to {private_term.lower()} appears here.\n",
+        custom_terms=(private_term,),
+    )
+    matches = [finding for finding in findings if finding.rule == "custom denylist term"]
+    assert len(matches) == 1
+    assert private_term.casefold() not in matches[0].render().casefold()
+    assert matches[0].excerpt == "[matched value withheld]"
+
+
+def test_denylist_loader_normalizes_comments_and_duplicates() -> None:
+    raw = "# private terms\nInternalName\ninternalname\nxy\n\nProject Cedar\n"
+    assert load_custom_denylist(raw) == ("InternalName", "Project Cedar")
 
 
 def test_scanner_allows_public_github_repository(tmp_path: Path) -> None:
