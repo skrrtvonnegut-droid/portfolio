@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import ipaddress
+import os
 import re
 import sys
 from collections.abc import Iterable
@@ -79,6 +80,7 @@ PRIVATE_METADATA_KEYS = {
 }
 
 IPV4_PATTERN = re.compile(r"(?<![\d.])(?:\d{1,3}\.){3}\d{1,3}(?![\d.])")
+MIN_DENYLIST_TERM_LENGTH = 3
 
 
 @dataclass(frozen=True)
@@ -107,7 +109,57 @@ def _excerpt(text: str, offset: int, length: int) -> str:
     return value[:180]
 
 
-def scan_text(path: Path, text: str) -> list[Finding]:
+def load_custom_denylist(raw: str | None = None) -> tuple[str, ...]:
+    """Load unique literal terms without exposing them in scanner output."""
+
+    if raw is None:
+        raw = os.environ.get("PORTFOLIO_DENYLIST", "")
+
+    terms: list[str] = []
+    seen: set[str] = set()
+    for line in raw.splitlines():
+        term = line.strip()
+        if not term or term.startswith("#"):
+            continue
+        if len(term) < MIN_DENYLIST_TERM_LENGTH:
+            continue
+        normalized = term.casefold()
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        terms.append(term)
+    return tuple(terms)
+
+
+def _scan_custom_terms(path: Path, text: str, terms: Iterable[str]) -> list[Finding]:
+    """Find private literal terms while withholding their values from logs."""
+
+    findings: list[Finding] = []
+    folded_text = text.casefold()
+    for term in terms:
+        folded_term = term.casefold()
+        offset = 0
+        while True:
+            match_offset = folded_text.find(folded_term, offset)
+            if match_offset == -1:
+                break
+            findings.append(
+                Finding(
+                    path=path,
+                    line=_line_number(text, match_offset),
+                    rule="custom denylist term",
+                    excerpt="[matched value withheld]",
+                )
+            )
+            offset = match_offset + len(folded_term)
+    return findings
+
+
+def scan_text(
+    path: Path,
+    text: str,
+    custom_terms: Iterable[str] = (),
+) -> list[Finding]:
     """Scan one text value."""
 
     findings: list[Finding] = []
@@ -148,13 +200,19 @@ def scan_text(path: Path, text: str) -> list[Finding]:
                     excerpt=_excerpt(text, match.start(), len(match.group(0))),
                 )
             )
+
+    findings.extend(_scan_custom_terms(path, text, custom_terms))
     return findings
 
 
-def scan_paths(paths: Iterable[Path]) -> list[Finding]:
+def scan_paths(
+    paths: Iterable[Path],
+    custom_terms: Iterable[str] = (),
+) -> list[Finding]:
     """Scan all supported public files beneath paths."""
 
     findings: list[Finding] = []
+    terms = tuple(custom_terms)
     for path in iter_files(paths):
         try:
             text = path.read_text(encoding="utf-8")
@@ -163,7 +221,7 @@ def scan_paths(paths: Iterable[Path]) -> list[Finding]:
                 Finding(path=path, line=1, rule="non-UTF-8 public file", excerpt=path.name)
             )
             continue
-        findings.extend(scan_text(path, text))
+        findings.extend(scan_text(path, text, custom_terms=terms))
     return sorted(findings, key=lambda item: (str(item.path), item.line, item.rule))
 
 
@@ -178,7 +236,8 @@ def main() -> int:
     )
     args = parser.parse_args()
 
-    findings = scan_paths(args.paths)
+    custom_terms = load_custom_denylist()
+    findings = scan_paths(args.paths, custom_terms=custom_terms)
     if findings:
         print("Public-content boundary scan failed:", file=sys.stderr)
         for finding in findings:
