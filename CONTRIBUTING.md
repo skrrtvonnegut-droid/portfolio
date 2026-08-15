@@ -14,6 +14,8 @@ Never include:
 
 When proposing content, state whether it is original, AI-assisted original, adapted, or an external reference.
 
+This repository is public. A draft branch or pull request is already publicly readable, even before merge. Confidentiality, contextual sanitization, provenance, and source-rights approval must therefore be completed in the private candidate workflow before content is pushed here. Pull-request review is a second gate for editorial quality, automated validation, and deployment approval.
+
 ## Stable artifact identity
 
 Use `portfolio.<domain>.<slug>` for every durable artifact ID, for example `portfolio.identity.service-account-registry`.
@@ -28,7 +30,8 @@ A pull request should:
 2. Identify any artifact IDs added or changed.
 3. Describe provenance and publication rights.
 4. Confirm that examples are synthetic or already public.
-5. Pass the repository's local and CI checks.
+5. Confirm that private disclosure review occurred before the public branch was created.
+6. Pass the repository's local and CI checks.
 
 Run:
 
