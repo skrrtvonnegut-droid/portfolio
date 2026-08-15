@@ -4,15 +4,17 @@
 
 Professional evidence begins in private working systems. Publication is a separate transition with explicit controls.
 
+Because this repository is public, opening a branch or draft pull request here is already a public disclosure event. Confidentiality, source-rights, provenance, and contextual sanitization approval therefore happen in the private control plane **before** a public branch is created. Pull-request review provides a second editorial and technical gate; merge controls inclusion in the portfolio site, not initial visibility.
+
 ```mermaid
 flowchart LR
-    A["Private work, study, and experiments"] --> B["Portfolio candidate"]
+    A["Private work, study, and experiments"] --> B["Private portfolio candidate"]
     B --> C{"Classification, rights, provenance, sanitization"}
     C -->|"Not publishable"| B
-    C -->|"Approved public draft"| D["Draft pull request"]
+    C -->|"Approved public content"| D["Public draft pull request"]
     D --> E{"Schema, content-boundary, secret, link, and build checks"}
     E -->|"Fail"| D
-    E -->|"Pass and human approval"| F["Merge"]
+    E -->|"Pass and editorial approval"| F["Merge"]
     F --> G["GitHub Pages"]
 ```
 
@@ -24,11 +26,11 @@ Private notes, work records, source relationships, and conversation history rema
 
 ### 2. Private curation and approval
 
-A candidate records what capability the work demonstrates, its source classification, provenance, publication rights, sanitization risk, and proposed public form. Approval requires both a valid public draft and a deliberate state transition.
+A candidate records what capability the work demonstrates, its source classification, provenance, publication rights, sanitization risk, and proposed public form. The fully reconstructed public text is reviewed privately. Only content in an explicitly approved state may be placed on a public branch or pull request.
 
 ### 3. Public artifact repository
 
-This repository contains only sanitized content, public metadata, validation code, and presentation assets. Stable artifact IDs connect public artifacts to private records without exposing private source mappings.
+This repository contains only sanitized content, public metadata, validation code, and presentation assets. Stable artifact IDs connect public artifacts to private records without exposing private source mappings. Draft branches and pull requests are public and must be treated as published disclosures even before merge.
 
 ### 4. Presentation
 
@@ -51,7 +53,7 @@ Merge to `main` triggers a clean GitHub Pages build. Monthly maintenance checks 
 
 ## Human authority
 
-Automation may reject a public draft. It may not declare private work safe merely because no scanner matched it. Classification, contextual sanitization, and final publication remain human decisions.
+Automation may reject a public draft. It may not declare private work safe merely because no scanner matched it. Classification, contextual sanitization, rights review, and the decision to disclose happen before the public PR. Editorial approval and the decision to place the artifact on the deployed portfolio site happen before merge.
 
 ## Published methodology
 
