@@ -1,5 +1,5 @@
 ---
-id: portfolio.learning-note.domain.short-name
+id: portfolio.domain.short-name
 slug: /learning/short-name/
 kind: learning-note
 title: Durable learning note title
@@ -17,8 +17,8 @@ rights:
   attribution: null
   source_url: null
 review:
-  last_reviewed: 2026-08-15
-  review_due: 2027-02-15
+  last_reviewed: "2026-08-15"
+  review_due: "2027-02-15"
 featured: false
 ---
 
