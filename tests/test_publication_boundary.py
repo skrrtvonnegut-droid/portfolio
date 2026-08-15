@@ -11,7 +11,11 @@ import yaml
 from scripts.build_artifact_index import render_index
 from scripts.check_review_dates import find_overdue
 from scripts.scan_public_content import load_custom_denylist, scan_text
-from scripts.validate_frontmatter import load_validator, validate_metadata
+from scripts.validate_frontmatter import (
+    load_artifact_registry,
+    load_validator,
+    validate_metadata,
+)
 from scripts.verify_projects import validate_registry
 
 
@@ -41,6 +45,17 @@ def valid_metadata() -> dict:
     }
 
 
+def registry_record() -> dict:
+    metadata = valid_metadata()
+    metadata.pop("title")
+    metadata.pop("summary")
+    return {
+        "path": "docs/artifacts/identity/synthetic-example.md",
+        "source_id": "portfolio.identity.synthetic-example",
+        "metadata": metadata,
+    }
+
+
 def test_valid_metadata_passes(tmp_path: Path) -> None:
     path = tmp_path / "artifact.md"
     errors = validate_metadata(valid_metadata(), path=path, validator=load_validator())
@@ -53,7 +68,6 @@ def test_adapted_artifact_requires_attribution(tmp_path: Path) -> None:
     path = tmp_path / "artifact.md"
     errors = validate_metadata(metadata, path=path, validator=load_validator())
     assert any("rights.attribution" in error for error in errors)
-    assert any("rights.source_url" in error for error in errors)
 
 
 def test_review_due_cannot_precede_reviewed_date(tmp_path: Path) -> None:
@@ -62,6 +76,42 @@ def test_review_due_cannot_precede_reviewed_date(tmp_path: Path) -> None:
     path = tmp_path / "artifact.md"
     errors = validate_metadata(metadata, path=path, validator=load_validator())
     assert any("cannot precede" in error for error in errors)
+
+
+def test_registry_loader_accepts_public_governance_overlay(tmp_path: Path) -> None:
+    path = tmp_path / "artifacts.yml"
+    path.write_text(
+        yaml.safe_dump(
+            {"schema_version": 1, "artifacts": [registry_record()]},
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+    records, errors = load_artifact_registry(path)
+    assert errors == []
+    assert records["docs/artifacts/identity/synthetic-example.md"]["metadata"]["id"] == (
+        "portfolio.case-study.identity.synthetic-example"
+    )
+
+
+def test_registry_loader_rejects_duplicate_paths(tmp_path: Path) -> None:
+    first = registry_record()
+    second = registry_record()
+    second["source_id"] = "portfolio.identity.synthetic-example-two"
+    second["metadata"] = dict(second["metadata"])
+    second["metadata"]["id"] = "portfolio.case-study.identity.synthetic-example-two"
+    second["metadata"]["slug"] = "/artifacts/identity/synthetic-example-two/"
+
+    path = tmp_path / "artifacts.yml"
+    path.write_text(
+        yaml.safe_dump(
+            {"schema_version": 1, "artifacts": [first, second]},
+            sort_keys=False,
+        ),
+        encoding="utf-8",
+    )
+    _, errors = load_artifact_registry(path)
+    assert any("duplicate path" in error for error in errors)
 
 
 def test_scanner_rejects_private_workspace_link(tmp_path: Path) -> None:

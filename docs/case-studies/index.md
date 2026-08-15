@@ -10,4 +10,7 @@ Case studies describe sanitized professional work through a consistent structure
 
 Raw internal documentation is not copied here. Exact names, production values, architecture identifiers, and private evidence are replaced with synthetic examples or expressed as reusable decision patterns.
 
-No historical case studies have been published yet. They will arrive through small, separately reviewed pull requests.
+## Published case studies
+
+- [Service Account Registry and Review System](../artifacts/governance/service-account-registry.md) — converting ambiguous non-human identities into an owned, classified, reviewable lifecycle control.
+- [Mail-Flow Change After-Action Review](../artifacts/service-management/mail-flow-change-after-action.md) — tracing a change failure through an undocumented dependency and turning the lesson into preventive control.

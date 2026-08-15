@@ -1,0 +1,146 @@
+schema_version: 1
+artifacts:
+  - path: docs/artifacts/identity-governance/privileged-role-activation.md
+    source_id: portfolio.identity.privileged-role-activation
+    metadata:
+      id: portfolio.technical-pattern.identity.privileged-role-activation
+      slug: /artifacts/identity-governance/privileged-role-activation/
+      kind: technical-pattern
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - identity
+        - security
+        - microsoft-365
+        - operations
+      skills:
+        - identity-governance
+        - privileged-identity-management
+        - role-based-access-control
+        - least-privilege
+        - technical-writing
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: false
+  - path: docs/artifacts/endpoint-management/staged-windows-update-rollout.md
+    source_id: portfolio.endpoint.staged-windows-update-rollout
+    metadata:
+      id: portfolio.technical-pattern.endpoint.staged-windows-update-rollout
+      slug: /artifacts/endpoint-management/staged-windows-update-rollout/
+      kind: technical-pattern
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - endpoint
+        - security
+        - microsoft-365
+        - operations
+      skills:
+        - endpoint-management
+        - change-enablement
+        - deployment-rings
+        - telemetry
+        - rollback-planning
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: false
+  - path: docs/artifacts/governance/service-account-registry.md
+    source_id: portfolio.identity.service-account-registry
+    metadata:
+      id: portfolio.case-study.identity.service-account-registry
+      slug: /artifacts/governance/service-account-registry/
+      kind: case-study
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - identity
+        - security
+        - operations
+        - documentation
+      skills:
+        - identity-governance
+        - non-human-identity
+        - data-modeling
+        - risk-modeling
+        - lifecycle-governance
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: true
+  - path: docs/artifacts/service-management/mail-flow-change-after-action.md
+    source_id: portfolio.service.mail-flow-change-after-action
+    metadata:
+      id: portfolio.case-study.operations.mail-flow-change-after-action
+      slug: /artifacts/service-management/mail-flow-change-after-action/
+      kind: case-study
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - microsoft-365
+        - security
+        - operations
+        - documentation
+      skills:
+        - incident-management
+        - problem-management
+        - change-enablement
+        - dependency-mapping
+        - mail-flow-troubleshooting
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: true
+  - path: docs/artifacts/knowledge-management/operational-documentation-system.md
+    source_id: portfolio.knowledge.operational-documentation-system
+    metadata:
+      id: portfolio.architecture.documentation.operational-documentation-system
+      slug: /artifacts/knowledge-management/operational-documentation-system/
+      kind: architecture
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - documentation
+        - operations
+        - ai-llm
+      skills:
+        - documentation-architecture
+        - knowledge-management
+        - technical-writing
+        - governance
+        - ai-assisted-workflows
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-15"
+        review_due: "2027-02-15"
+      featured: true
