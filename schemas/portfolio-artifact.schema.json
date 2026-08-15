@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://skrrtvonnegut-droid.github.io/portfolio/schemas/portfolio-artifact.schema.json",
   "title": "Portfolio Artifact",
-  "description": "Public metadata contract for a sanitized professional portfolio artifact.",
+  "description": "Public metadata contract for a sanitized professional portfolio artifact. Stable IDs follow portfolio.<domain>.<slug> and do not encode presentation type.",
   "type": "object",
   "additionalProperties": false,
   "required": [
@@ -24,7 +24,8 @@
   "properties": {
     "id": {
       "type": "string",
-      "pattern": "^portfolio\\.(case-study|template|project-card|technical-pattern|learning-note|architecture)\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+      "description": "Durable identifier in the form portfolio.<domain>.<slug>. It remains stable if the artifact kind or public path changes.",
+      "pattern": "^portfolio\\.[a-z0-9]+(?:-[a-z0-9]+)*\\.[a-z0-9]+(?:-[a-z0-9]+)*$"
     },
     "slug": {
       "type": "string",
