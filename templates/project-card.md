@@ -1,5 +1,5 @@
 ---
-id: portfolio.project-card.project-name
+id: portfolio.domain.project-name
 slug: /projects/project-name/
 kind: project-card
 title: Public project name
@@ -17,8 +17,8 @@ rights:
   attribution: null
   source_url: null
 review:
-  last_reviewed: 2026-08-15
-  review_due: 2027-02-15
+  last_reviewed: "2026-08-15"
+  review_due: "2027-02-15"
 featured: false
 ---
 
