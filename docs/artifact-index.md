@@ -12,5 +12,6 @@
 | [The People’s Grimoire](projects/the-peoples-grimoire.md) | project card | ai llm, automation, operations, documentation | 2027-02-15 |
 | [Privileged Role Activation with Microsoft Entra PIM](artifacts/identity-governance/privileged-role-activation.md) | technical pattern | identity, security, microsoft 365, operations | 2027-02-15 |
 | [Staged Windows Update Rollout](artifacts/endpoint-management/staged-windows-update-rollout.md) | technical pattern | endpoint, security, microsoft 365, operations | 2027-02-15 |
+| [Software Evaluation and Intake Rubric](patterns/templates/software-evaluation-rubric.md) | template | operations, security, documentation | 2027-02-15 |
 
-**Published artifacts:** 9
+**Published artifacts:** 10
