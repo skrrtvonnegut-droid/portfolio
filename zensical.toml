@@ -21,7 +21,7 @@ nav = [
   { "Artifact index" = "artifact-index.md" },
 ]
 
-extra_css = ["stylesheets/extra.css"]
+extra_css = ["stylesheets/extra.css", "stylesheets/resume.css"]
 
 [project.validation]
 invalid_links = true

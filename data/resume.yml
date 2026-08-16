@@ -1,0 +1,16 @@
+schema_version: 1
+resume_id: portfolio.resume.canonical
+release:
+  state: scaffold
+  version: null
+  approved_at: null
+  content_hash: null
+basics:
+  name: Breezy Lynne
+  headline: null
+  location: null
+  links: []
+summary: []
+skills: []
+experience: []
+education: []

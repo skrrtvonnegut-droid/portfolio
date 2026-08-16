@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://raw.githubusercontent.com/skrrtvonnegut-droid/portfolio/main/schemas/resume.schema.json",
+  "title": "Public resume content contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "resume_id",
+    "release",
+    "basics",
+    "summary",
+    "skills",
+    "experience",
+    "education"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "resume_id": {
+      "const": "portfolio.resume.canonical"
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state", "version", "approved_at", "content_hash"],
+      "properties": {
+        "state": {
+          "enum": ["scaffold", "approved"]
+        },
+        "version": {
+          "type": ["string", "null"],
+          "pattern": "^resume-[0-9]{4}-[0-9]{2}-[0-9]{2}(?:\\.[0-9]+)?$"
+        },
+        "approved_at": {
+          "type": ["string", "null"],
+          "format": "date-time"
+        },
+        "content_hash": {
+          "type": ["string", "null"],
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "basics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "headline", "location", "links"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "headline": {
+          "type": ["string", "null"]
+        },
+        "location": {
+          "type": ["string", "null"]
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/link"
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/skill_group"
+      }
+    },
+    "experience": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/experience"
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/education"
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "partial_date": {
+      "type": "string",
+      "pattern": "^[0-9]{4}(?:-(?:0[1-9]|1[0-2]))?$"
+    },
+    "link": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "url"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://"
+        }
+      }
+    },
+    "skill_group": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "label", "order", "items"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "items": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "experience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "order",
+        "role",
+        "organization",
+        "location",
+        "start",
+        "end",
+        "current",
+        "highlights"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "type": ["string", "null"]
+        },
+        "start": {
+          "$ref": "#/$defs/partial_date"
+        },
+        "end": {
+          "oneOf": [
+            {
+              "$ref": "#/$defs/partial_date"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "current": {
+          "type": "boolean"
+        },
+        "highlights": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "education": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "order", "credential", "institution", "location", "start", "end"],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "order": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "credential": {
+          "type": "string",
+          "minLength": 1
+        },
+        "institution": {
+          "type": "string",
+          "minLength": 1
+        },
+        "location": {
+          "type": ["string", "null"]
+        },
+        "start": {
+          "$ref": "#/$defs/partial_date"
+        },
+        "end": {
+          "$ref": "#/$defs/partial_date"
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "release": {
+            "properties": {
+              "state": {
+                "const": "approved"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "release": {
+            "properties": {
+              "version": {
+                "type": "string"
+              },
+              "approved_at": {
+                "type": "string"
+              },
+              "content_hash": {
+                "type": "string"
+              }
+            }
+          },
+          "summary": {
+            "minItems": 1
+          },
+          "experience": {
+            "minItems": 1
+          },
+          "education": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ]
+}
