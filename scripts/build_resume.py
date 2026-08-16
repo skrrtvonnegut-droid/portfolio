@@ -219,9 +219,11 @@ def validate_resume(
             errors.append(f"experience.{index}.end: current roles must have a null end")
         if not current and not isinstance(end, str):
             errors.append(f"experience.{index}.end: past roles require an end date")
-        if isinstance(end, str):
-            if _date_bounds(record["start"])[0] > _date_bounds(end)[1]:
-                errors.append(f"experience.{index}: end date cannot precede start date")
+        if (
+            isinstance(end, str)
+            and _date_bounds(record["start"])[0] > _date_bounds(end)[1]
+        ):
+            errors.append(f"experience.{index}: end date cannot precede start date")
 
     for index, record in enumerate(payload["education"]):
         if _date_bounds(record["start"])[0] > _date_bounds(record["end"])[1]:
