@@ -69,7 +69,7 @@ It omits the source environment’s identities, exact topology, private links, i
 
 Automation may reject a public draft. It may not declare private work safe merely because no scanner matched it. Classification, contextual sanitization, technical accuracy, evidentiary proportionality, and final publication remain human decisions.
 
-## Published methodology
+## Published methodology and architecture (2)
 
 - [Living Professional Portfolio Architecture](living-professional-portfolio.md) — the four-plane, review-gated system connecting private evidence, candidate curation, CI/CD, GitHub Pages, provenance, and lifecycle maintenance.
 - [Operational Documentation System](../artifacts/knowledge-management/operational-documentation-system.md) — deciding whether knowledge belongs in a design document, SOP, runbook, knowledge article, postmortem, or decision record.
