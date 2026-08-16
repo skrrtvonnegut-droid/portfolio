@@ -4,7 +4,7 @@ Project cards provide a curated narrative for public repositories while leaving 
 
 They focus on the problem, important design choices, demonstrated capabilities, current maturity, and the boundary between the public project and any private deployment context.
 
-## Published project cards
+## Published project cards (3)
 
 - [Microsoft 365 License Report](m365-license-report.md) — PowerShell and Microsoft Graph reporting for license assignment, usage, cost signals, and governance review.
 - [Prompt Library](prompt-library.md) — a versioned registry for prompts, skills, macros, stable identity, routing metadata, and validation.
