@@ -13,6 +13,7 @@ site_dir = "site"
 nav = [
   { "Home" = "index.md" },
   { "About" = "about/index.md" },
+  { "Resume" = "resume/index.md" },
   { "Case studies" = "case-studies/index.md" },
   { "Patterns & templates" = "patterns/index.md" },
   { "Projects" = "projects/index.md" },
@@ -21,7 +22,7 @@ nav = [
   { "Artifact index" = "artifact-index.md" },
 ]
 
-extra_css = ["stylesheets/extra.css"]
+extra_css = ["stylesheets/extra.css", "stylesheets/resume.css"]
 
 [project.validation]
 invalid_links = true

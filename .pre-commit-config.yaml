@@ -1,6 +1,11 @@
 repos:
   - repo: local
     hooks:
+      - id: portfolio-resume-sync
+        name: Verify generated resume
+        entry: python -m scripts.build_resume --check
+        language: system
+        pass_filenames: false
       - id: portfolio-markdown
         name: Lint public Markdown
         entry: python -m scripts.lint_markdown docs templates
