@@ -13,7 +13,9 @@ from scripts.common import DOCS_ROOT, REPO_ROOT, iter_files, repo_relative
 
 TEMPLATES_ROOT = REPO_ROOT / "templates"
 HEADING_PATTERN = re.compile(r"^(#{1,6})\s+\S")
+HTML_HEADING_PATTERN = re.compile(r"^\s*<h([1-6])(?:\s|>)", re.IGNORECASE)
 FENCE_PATTERN = re.compile(r"^```(.*)$")
+GENERATED_H1_TOKEN = "{{ semantic_resume_body }}"
 
 
 def lint_file(path: Path) -> list[str]:
@@ -52,9 +54,13 @@ def lint_file(path: Path) -> list[str]:
             continue
 
         heading = HEADING_PATTERN.match(line)
-        if not heading:
+        html_heading = HTML_HEADING_PATTERN.match(line)
+        if heading:
+            level = len(heading.group(1))
+        elif html_heading:
+            level = int(html_heading.group(1))
+        else:
             continue
-        level = len(heading.group(1))
         if level == 1:
             h1_count += 1
         if previous_heading_level and level > previous_heading_level + 1:
@@ -63,6 +69,13 @@ def lint_file(path: Path) -> list[str]:
                 f"from H{previous_heading_level} to H{level}"
             )
         previous_heading_level = level
+
+    generated_resume_template = (
+        path.parent.resolve() == TEMPLATES_ROOT.resolve()
+        and path.name in {"resume-stylized.md", "resume-plain.md"}
+    )
+    if h1_count == 0 and generated_resume_template and text.count(GENERATED_H1_TOKEN) == 1:
+        h1_count = 1
 
     if in_fence:
         errors.append(f"{repo_relative(path)}: unclosed code fence")

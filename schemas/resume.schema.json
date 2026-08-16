@@ -197,12 +197,39 @@
         },
         "highlights": {
           "type": "array",
+          "minItems": 1,
           "items": {
             "type": "string",
             "minLength": 1
           }
         }
-      }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "current": {
+                "const": true
+              }
+            },
+            "required": ["current"]
+          },
+          "then": {
+            "properties": {
+              "end": {
+                "type": "null"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "end": {
+                "$ref": "#/$defs/partial_date"
+              }
+            }
+          }
+        }
+      ]
     },
     "education": {
       "type": "object",
@@ -243,13 +270,57 @@
           "release": {
             "properties": {
               "state": {
-                "const": "approved"
+                "const": "scaffold"
+              }
+            },
+            "required": ["state"]
+          }
+        },
+        "required": ["release"]
+      },
+      "then": {
+        "properties": {
+          "release": {
+            "properties": {
+              "version": {
+                "type": "null"
+              },
+              "approved_at": {
+                "type": "null"
+              },
+              "content_hash": {
+                "type": "null"
               }
             }
+          },
+          "basics": {
+            "properties": {
+              "headline": {
+                "type": "null"
+              },
+              "location": {
+                "type": "null"
+              },
+              "links": {
+                "maxItems": 0
+              }
+            }
+          },
+          "summary": {
+            "maxItems": 0
+          },
+          "skills": {
+            "maxItems": 0
+          },
+          "experience": {
+            "maxItems": 0
+          },
+          "education": {
+            "maxItems": 0
           }
         }
       },
-      "then": {
+      "else": {
         "properties": {
           "release": {
             "properties": {
@@ -264,7 +335,18 @@
               }
             }
           },
+          "basics": {
+            "properties": {
+              "headline": {
+                "type": "string",
+                "minLength": 1
+              }
+            }
+          },
           "summary": {
+            "minItems": 1
+          },
+          "skills": {
             "minItems": 1
           },
           "experience": {

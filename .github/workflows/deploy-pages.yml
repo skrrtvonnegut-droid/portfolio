@@ -38,6 +38,7 @@ jobs:
         env:
           PORTFOLIO_DENYLIST: ${{ secrets.PORTFOLIO_DENYLIST }}
         run: |
+          python -m scripts.build_resume --check
           python -m scripts.validate_frontmatter docs
           python -m scripts.scan_public_content
           python -m scripts.build_artifact_index --check

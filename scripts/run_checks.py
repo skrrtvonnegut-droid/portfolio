@@ -8,6 +8,7 @@ import subprocess
 import sys
 
 COMMANDS = [
+    [sys.executable, "-m", "scripts.build_resume", "--check"],
     [sys.executable, "-m", "scripts.lint_markdown", "docs", "templates"],
     [sys.executable, "-m", "scripts.validate_frontmatter", "docs"],
     [sys.executable, "-m", "scripts.scan_public_content"],

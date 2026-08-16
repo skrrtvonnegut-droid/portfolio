@@ -1,6 +1,6 @@
 # Living resume publication architecture
 
-> **Status:** architecture scaffold. No resume copy has been approved, exported, or added to site navigation.
+> **Status:** approved architecture with an implemented publication scaffold. No resume copy has been approved, exported, or added to site navigation.
 
 ## Purpose
 
@@ -36,6 +36,8 @@ The deployed site never reads from the private workspace at runtime. Private pag
 
 Any content edit after approval invalidates the approval hash and returns the candidate to review.
 
+Repository checks prove that the public YAML, its recorded digest, and both generated pages agree; they cannot independently attest private workspace state. During promotion, the export actor must compare the computed digest with the candidate's recorded Approval Hash and include that cross-system check in the pull-request evidence. Reviewers enforce this gate without copying private workspace identifiers into GitHub.
+
 ## Draft content contract
 
 The public snapshot is a versioned semantic document, not page-shaped Markdown. The draft contract includes:
@@ -53,7 +55,7 @@ Stable IDs and explicit order values make changes reviewable and prevent reorder
 
 Both pages receive the same semantic resume body. Only their outer shell and CSS may differ. The plain view cannot omit, abbreviate, or reorder content from the styled view.
 
-The implementation pass will add a deterministic renderer and CI checks that:
+The deterministic renderer and CI checks now:
 
 - Validate `data/resume.yml` against `schemas/resume.schema.json`.
 - Regenerate both pages and fail when tracked outputs are stale.
@@ -81,14 +83,25 @@ docs/stylesheets/resume.css
 tests/test_resume_sync.py
 ```
 
-The scaffold establishes the data, schema, template, route, and style paths. The renderer, full parity tests, navigation entry, and real resume content belong to the approved implementation pass.
+The scaffold now establishes the data, schema, deterministic renderer, templates, routes, scoped styles, approval-hash validation, and parity tests. The navigation entry and real resume content remain deliberately blocked until exact-content approval.
+
+## Implementation status
+
+- The renderer rejects duplicate YAML keys, unknown schema structures, invalid lifecycle metadata, inconsistent dates, duplicate IDs or order values, and stale approval hashes.
+- A SHA256 digest covers normalized semantic content while excluding release metadata, avoiding a recursive hash.
+- Both routes contain one byte-identical semantic article; only the outer presentation shell and format switch differ.
+- Local checks, pull-request CI, pre-commit, and deployment all fail when generated pages are stale.
+- The styled view uses a responsive, accessible presentation layer, while the plain view linearizes the same document for printing, copying, and ATS-friendly use.
+- The scaffold remains off site navigation and contains no normalized employment claims.
 
 ## Review gate
 
-Before the content pass, confirm:
+Approved architecture decisions:
 
 1. Reuse the existing portfolio candidate lifecycle and add `Resume` to its artifact taxonomy.
 2. Treat the current private resume page as source material and the normalized candidate body as the canonical public draft.
 3. Publish a public-safe plain page first; keep application-only contact details in a private overlay.
 4. Defer PDF or word-processing generation until its text extraction and privacy controls are designed.
 5. Resolve conflicting dates and verify any quantitative or organization-specific claims before approval.
+
+The first four decisions are approved. The fifth is the active content-review gate and prevents promotion until factual and privacy questions are resolved.
