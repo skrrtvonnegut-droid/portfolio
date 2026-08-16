@@ -11,6 +11,10 @@ My work often sits between several layers at once:
 
 I am especially interested in systems that become quieter through better structure: clear ownership, explicit lifecycle states, reviewable automation, useful telemetry, and documentation that explains both **how** and **why**.
 
+## Published operating model (1)
+
+- [Making Tomorrow Quieter](operating-model.md) — the principles and operating loop I use to reduce recurring operational noise while preserving ownership, judgment, observability, and reversibility.
+
 ## Portfolio standards
 
 Every substantive artifact identifies its provenance:
