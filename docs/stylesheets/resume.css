@@ -505,8 +505,25 @@
   body:has(.resume-shell) .md-footer,
   body:has(.resume-shell) .md-top,
   body:has(.resume-shell) .md-search,
+  body:has(.resume-shell) .md-skip,
   body:has(.resume-shell) .resume__utility {
     display: none !important;
+  }
+
+  html:has(.resume-shell),
+  body:has(.resume-shell),
+  body:has(.resume-shell) .md-container,
+  body:has(.resume-shell) .md-main,
+  body:has(.resume-shell) .md-main__inner,
+  body:has(.resume-shell) .md-content,
+  body:has(.resume-shell) .md-content__inner {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+  }
+
+  body:has(.resume-shell) .md-main__inner {
+    display: block;
   }
 
   body:has(.resume-shell) .md-grid,
@@ -537,8 +554,8 @@
     background: #fff;
     box-shadow: none;
     font-family: Arial, Helvetica, sans-serif;
-    font-size: 10pt;
-    line-height: 1.35;
+    font-size: 9.75pt;
+    line-height: 1.3;
   }
 
   .resume--stylized::before,
@@ -552,6 +569,26 @@
   .resume__skill-groups,
   .resume__entries {
     display: block;
+  }
+
+  .resume__masthead {
+    padding-bottom: 0.7rem;
+  }
+
+  .resume__eyebrow {
+    margin-bottom: 0.25rem;
+    font-size: 8pt;
+  }
+
+  .resume__name {
+    font-size: 22pt;
+    line-height: 1;
+  }
+
+  .resume__headline {
+    margin-top: 0.35rem;
+    font-size: 10.5pt;
+    line-height: 1.3;
   }
 
   .resume__links {
@@ -575,6 +612,12 @@
     background: transparent;
   }
 
+  .resume__summary p,
+  .resume__status p {
+    font-size: 9.75pt;
+    line-height: 1.28;
+  }
+
   .resume__skill-groups,
   .resume__entries {
     padding-left: 0;
@@ -587,31 +630,76 @@
   }
 
   .resume__skill-list li {
+    margin: 0;
     padding: 0;
     border: 0;
     background: transparent;
-    font-size: inherit;
+    font-size: 9pt;
+    line-height: 1.15;
   }
 
   .resume__entry-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.2rem 0.7rem;
+    display: block;
     margin-top: 0.2rem;
+    font-size: 9pt;
     text-align: left;
     white-space: normal;
   }
 
+  .resume__entry-meta .resume__location,
+  .resume__entry-meta .resume__dates {
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .resume__entry-meta .resume__location {
+    margin-right: 0.7rem;
+  }
+
   .resume__section {
-    margin-top: 1.1rem;
+    margin-top: 0.65rem;
   }
 
   .resume__section-title {
-    margin-bottom: 0.55rem;
+    margin-bottom: 0.35rem;
+    font-size: 8.5pt;
+    white-space: nowrap;
   }
 
   .resume__section-title::after {
     background: #000;
+  }
+
+  .resume__skill-group {
+    margin-top: 0.15rem;
+  }
+
+  .resume__skill-title {
+    margin-bottom: 0.08rem;
+    font-size: 9.5pt;
+  }
+
+  .resume__entry {
+    padding-bottom: 0.5rem;
+  }
+
+  .resume__entry-role {
+    font-size: 10.5pt;
+    line-height: 1.25;
+  }
+
+  .resume__organization {
+    margin-top: 0.1rem;
+    font-size: 9.25pt;
+  }
+
+  .resume__highlights {
+    margin-top: 0.35rem;
+  }
+
+  .resume__highlights li {
+    margin-top: 0.12rem;
+    line-height: 1.3;
   }
 
   .resume__entry-header,
