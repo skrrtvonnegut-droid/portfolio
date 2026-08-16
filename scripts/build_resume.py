@@ -40,18 +40,18 @@ TOKEN_PATTERN = re.compile(r"{{\s*([a-z0-9_.]+)\s*}}")
 CONTROL_PATTERN = re.compile(r"[\x00-\x1f\x7f]")
 MONTHS = (
     "",
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
+    "January",
+    "February",
+    "March",
+    "April",
     "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
 )
 ALLOWED_SHELL_TEXT = ("Styled", "Plain / ATS-friendly")
 
@@ -226,7 +226,11 @@ def validate_resume(
             errors.append(f"experience.{index}: end date cannot precede start date")
 
     for index, record in enumerate(payload["education"]):
-        if _date_bounds(record["start"])[0] > _date_bounds(record["end"])[1]:
+        if (
+            "start" in record
+            and "end" in record
+            and _date_bounds(record["start"])[0] > _date_bounds(record["end"])[1]
+        ):
             errors.append(f"education.{index}: end date cannot precede start date")
 
     release = payload["release"]
@@ -398,10 +402,16 @@ def _render_approved(payload: Mapping[str, Any]) -> str:
     for record in _ordered_records(payload, "education"):
         entry_id = f'education-{_escape(record["id"])}'
         location = _optional_location(record["location"])
-        dates = (
-            f'<span class="resume__dates">{_time(record["start"])} '
-            f'– {_time(record["end"])}</span>'
-        )
+        if "graduated" in record:
+            dates = (
+                '<span class="resume__dates">Graduated '
+                f'{_time(record["graduated"])}</span>'
+            )
+        else:
+            dates = (
+                f'<span class="resume__dates">{_time(record["start"])} '
+                f'– {_time(record["end"])}</span>'
+            )
         meta_parts = [part for part in (location, dates) if part]
         meta = "\n".join(meta_parts)
         lines.extend(

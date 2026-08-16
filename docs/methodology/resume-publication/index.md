@@ -1,6 +1,6 @@
 # Living resume publication architecture
 
-> **Status:** approved architecture with an implemented publication scaffold. No resume copy has been approved, exported, or added to site navigation.
+> **Status:** v0.2 is approved and exported to the promotion pull request. Merge and deployment remain pending.
 
 ## Purpose
 
@@ -22,7 +22,7 @@ The system produces two public representations without creating two manually mai
 
 The deployed site never reads from the private workspace at runtime. Private page links, internal identifiers, application-only contact details, and unapproved claims must not enter this repository.
 
-## Proposed promotion flow
+## Promotion flow
 
 1. Edit the canonical resume candidate in the private portfolio pipeline.
 2. Resolve factual, privacy, provenance, and rights questions.
@@ -38,15 +38,15 @@ Any content edit after approval invalidates the approval hash and returns the ca
 
 Repository checks prove that the public YAML, its recorded digest, and both generated pages agree; they cannot independently attest private workspace state. During promotion, the export actor must compare the computed digest with the candidate's recorded Approval Hash and include that cross-system check in the pull-request evidence. Reviewers enforce this gate without copying private workspace identifiers into GitHub.
 
-## Draft content contract
+## Public content contract
 
-The public snapshot is a versioned semantic document, not page-shaped Markdown. The draft contract includes:
+The public snapshot is a versioned semantic document, not page-shaped Markdown. The contract includes:
 
 - Release state, version, approval time, and a SHA256 content hash.
 - Public-safe name, headline, location, and labeled HTTPS links.
 - Summary paragraphs.
 - Ordered skill groups.
-- Ordered experience and education entries with stable IDs and partial dates.
+- Ordered experience and education entries with stable IDs, partial date ranges, or a completion-only graduation year.
 - Ordered achievement bullets as content, not decorative layout.
 
 Stable IDs and explicit order values make changes reviewable and prevent reordering from becoming ambiguous. The exporter must fail on unknown source structures rather than silently dropping content.
@@ -67,9 +67,9 @@ The deterministic renderer and CI checks now:
 
 The public GitHub snapshot should contain only contact details deliberately approved for the open web. Private phone, email, street address, or job-specific tailoring can remain in a private application overlay and be combined when producing a targeted copy.
 
-A deterministic PDF or word-processing export is intentionally deferred. The first release should establish the styled route and the plain print route without introducing an opaque binary that bypasses the text scanner.
+A deterministic PDF or word-processing export is intentionally deferred. v0.2 establishes the styled route and the plain print route without introducing an opaque binary that bypasses the text scanner.
 
-## Proposed repository paths
+## Repository paths
 
 ```text
 data/resume.yml
@@ -83,7 +83,7 @@ docs/stylesheets/resume.css
 tests/test_resume_sync.py
 ```
 
-The scaffold now establishes the data, schema, deterministic renderer, templates, routes, scoped styles, approval-hash validation, and parity tests. The navigation entry and real resume content remain deliberately blocked until exact-content approval.
+The implementation establishes the data, schema, deterministic renderer, templates, routes, scoped styles, approval-hash validation, parity tests, navigation entry, and approved v0.2 public snapshot.
 
 ## Implementation status
 
@@ -92,9 +92,9 @@ The scaffold now establishes the data, schema, deterministic renderer, templates
 - Both routes contain one byte-identical semantic article; only the outer presentation shell and format switch differ.
 - Local checks, pull-request CI, pre-commit, and deployment all fail when generated pages are stale.
 - The styled view uses a responsive, accessible presentation layer, while the plain view linearizes the same document for printing, copying, and ATS-friendly use.
-- The scaffold remains off site navigation and contains no normalized employment claims.
+- The approved v0.2 snapshot is linked from site navigation on the promotion branch; publication completes after review, merge, and deployment.
 
-## Review gate
+## Approval outcome
 
 Approved architecture decisions:
 
@@ -104,4 +104,4 @@ Approved architecture decisions:
 4. Defer PDF or word-processing generation until its text extraction and privacy controls are designed.
 5. Resolve conflicting dates and verify any quantitative or organization-specific claims before approval.
 
-The first four decisions are approved. The fifth is the active content-review gate and prevents promotion until factual and privacy questions are resolved.
+All five decisions have been resolved for v0.2. The exact normalized public body is approved, its digest is recorded in `data/resume.yml`, and both generated views match that snapshot. The pull request merge and deployment are the remaining publication gates.

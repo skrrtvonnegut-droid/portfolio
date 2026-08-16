@@ -1,16 +1,112 @@
 schema_version: 1
 resume_id: portfolio.resume.canonical
 release:
-  state: scaffold
-  version: null
-  approved_at: null
-  content_hash: null
+  state: approved
+  version: resume-2026-08-15
+  approved_at: "2026-08-15T21:19:32-07:00"
+  content_hash: "57cb4d5bea580358156b240028e9c8be6276ea74ee8d0612d7a711cffe60bd06"
 basics:
   name: Breezy Lynne
-  headline: null
+  headline: Systems Administrator | Microsoft 365 | Identity & Access | Automation
   location: null
   links: []
-summary: []
-skills: []
-experience: []
-education: []
+summary:
+  - Systems Administrator specializing in Microsoft 365 administration, identity and access governance, endpoint management, security operations, and automation. I work where systems, people, and process meet—turning recurring operational friction into governed, repeatable systems through PowerShell automation, stronger lifecycle controls, and durable documentation. My focus is making enterprise platforms more reliable, supportable, and less dependent on manual work or tribal knowledge.
+skills:
+  - id: microsoft-cloud
+    label: Microsoft & Cloud
+    order: 10
+    items:
+      - Microsoft 365
+      - Microsoft Entra ID
+      - Active Directory
+      - Exchange Online
+      - Microsoft Intune
+      - Microsoft Defender for Endpoint
+      - SharePoint Online
+      - Microsoft Teams
+      - Power Platform
+      - Azure
+  - id: automation-scripting
+    label: Automation & Scripting
+    order: 20
+    items:
+      - PowerShell
+      - Power Automate
+      - Python
+  - id: identity-security
+    label: Identity & Security
+    order: 30
+    items:
+      - Identity lifecycle management
+      - Identity and access governance
+      - Role-based access
+      - Dynamic groups
+      - Privileged access reviews
+      - Conditional Access
+      - MFA
+      - Security alert triage
+      - Phishing response
+  - id: it-operations
+    label: IT Operations
+    order: 40
+    items:
+      - Windows administration
+      - Endpoint management
+      - SaaS administration
+      - Licensing governance
+      - IT service management
+      - Incident and problem management
+      - Runbooks
+      - SOPs
+      - Technical documentation
+experience:
+  - id: microsoft-365-systems-administrator
+    order: 10
+    role: Microsoft 365 Systems Administrator
+    organization: United States Bakery
+    location: Vancouver, WA
+    start: "2023-02"
+    end: null
+    current: true
+    highlights:
+      - Administer Microsoft 365 services across identity, endpoint management, collaboration, email, security, licensing, and automation.
+      - Led the organization’s migration from on-premises Exchange to Exchange Online, modernizing messaging operations and support.
+      - Implemented HRIS-to-Active Directory provisioning and dynamic groups to improve identity data accuracy, standardize access and licensing assignment, and reduce manual administration.
+      - Build and maintain PowerShell automation for identity lifecycle tasks, endpoint provisioning, auditing, and licensing governance.
+      - Strengthen identity and security governance through privileged access reviews, risky-user investigations, access remediation, licensing audits, and security-alert triage.
+      - Administer Intune and Defender for Endpoint for device enrollment, configuration, compliance, application access, and endpoint protection in an enterprise Windows environment.
+      - Create governance registers, runbooks, and operational procedures that turn recurring work and tribal knowledge into repeatable, supportable processes.
+      - Partner with Service Desk, Infrastructure, HR, Security, Finance, vendors, and business teams to resolve cross-functional issues and design sustainable production solutions.
+  - id: tech-support-analyst
+    order: 20
+    role: Tech Support Analyst
+    organization: United States Bakery
+    location: Vancouver, WA
+    start: "2022-06"
+    end: "2023-02"
+    current: false
+    highlights:
+      - Automated Windows workstation provisioning and configuration with PowerShell, improving build consistency and reducing manual setup.
+      - Consolidated and expanded internal knowledge-base documentation, giving the Service Desk more reliable troubleshooting and onboarding material.
+      - Supported Windows desktops and laptops, Android devices, Microsoft 365, printers, VPN, authentication, and network access in an enterprise environment.
+      - Partnered with Infrastructure and Systems teams on escalated incidents involving servers, identity, networking, and enterprise applications.
+      - Delivered clear, outcome-focused support across the workforce, including executive users.
+  - id: system-support-specialist
+    order: 30
+    role: System Support Specialist
+    organization: United Tote
+    location: Portland, OR
+    start: "2021-07"
+    end: "2021-10"
+    current: false
+    highlights:
+      - Supported time-sensitive wagering-system operations through command-line tools and established procedures, including system resets and pricing adjustments.
+      - Transmitted daily sales and financial data and completed backup procedures to support data integrity and operational continuity.
+education:
+  - id: bachelor-arts-english
+    order: 10
+    credential: Bachelor of Arts in English Language and Literature
+    institution: University of Utah
+    location: Salt Lake City, UT
+    graduated: "2017"

@@ -101,6 +101,10 @@
       "type": "string",
       "pattern": "^[0-9]{4}(?:-(?:0[1-9]|1[0-2]))?$"
     },
+    "year": {
+      "type": "string",
+      "pattern": "^[0-9]{4}$"
+    },
     "link": {
       "type": "object",
       "additionalProperties": false,
@@ -234,7 +238,7 @@
     "education": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "order", "credential", "institution", "location", "start", "end"],
+      "required": ["id", "order", "credential", "institution", "location"],
       "properties": {
         "id": {
           "$ref": "#/$defs/id"
@@ -259,8 +263,32 @@
         },
         "end": {
           "$ref": "#/$defs/partial_date"
+        },
+        "graduated": {
+          "$ref": "#/$defs/year"
         }
-      }
+      },
+      "oneOf": [
+        {
+          "required": ["graduated"],
+          "not": {
+            "anyOf": [
+              {
+                "required": ["start"]
+              },
+              {
+                "required": ["end"]
+              }
+            ]
+          }
+        },
+        {
+          "required": ["start", "end"],
+          "not": {
+            "required": ["graduated"]
+          }
+        }
+      ]
     }
   },
   "allOf": [

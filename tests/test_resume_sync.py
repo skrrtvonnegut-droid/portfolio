@@ -115,7 +115,8 @@ def test_repository_snapshot_validates(schema: dict[str, object]) -> None:
 
 
 def test_tracked_pages_match_renderer_and_share_exact_content() -> None:
-    outputs = render_outputs(load_resume(DATA_PATH))
+    payload = load_resume(DATA_PATH)
+    outputs = render_outputs(payload)
     assert check_outputs(outputs) == []
 
     rendered = list(outputs.values())
@@ -125,7 +126,9 @@ def test_tracked_pages_match_renderer_and_share_exact_content() -> None:
         assert text.count(SEMANTIC_START) == 1
         assert text.count(SEMANTIC_END) == 1
         assert text.count("<h1 ") == 1
-        assert 'data-resume-content-hash="scaffold"' in text
+        assert (
+            f'data-resume-content-hash="{payload["release"]["content_hash"]}"' in text
+        )
 
 
 def test_templates_expose_only_the_fixed_contract() -> None:
@@ -174,11 +177,38 @@ def test_approved_fixture_validates_and_escapes_html(
     assert "Sample &amp; Candidate" in body
     assert "Category &amp; A" in body
     assert "public&amp;from" in body
-    assert '<time datetime="2023-02">Feb 2023</time>' in body
+    assert '<time datetime="2023-02">February 2023</time>' in body
     parser = TextExtractor()
     parser.feed(body)
     plain_text = " ".join("".join(parser.values).split())
-    assert "Example Location Feb 2023 – Present" in plain_text
+    assert "Example Location February 2023 – Present" in plain_text
+
+
+def test_completion_only_education_renders_graduation_year(
+    approved_resume: dict[str, object],
+    schema: dict[str, object],
+) -> None:
+    completion_only = deepcopy(approved_resume)
+    education = completion_only["education"][0]  # type: ignore[index]
+    education.pop("start")
+    education.pop("end")
+    education["graduated"] = "2017"
+    completion_only["release"]["content_hash"] = compute_content_hash(  # type: ignore[index]
+        completion_only
+    )
+
+    assert validate_resume(completion_only, schema) == []
+    body = render_semantic_body(completion_only)
+    assert '<span class="resume__dates">Graduated <time datetime="2017">2017</time></span>' in body
+
+
+def test_education_rejects_mixed_completion_and_date_range(
+    approved_resume: dict[str, object],
+    schema: dict[str, object],
+) -> None:
+    mixed_dates = deepcopy(approved_resume)
+    mixed_dates["education"][0]["graduated"] = "2017"  # type: ignore[index]
+    assert validate_resume(mixed_dates, schema)
 
 
 @pytest.mark.parametrize(
@@ -203,7 +233,7 @@ def test_semantic_invariants_reject_ambiguous_content(
     assert any(expected in error for error in errors)
 
 
-def test_hash_mismatch_and_scaffold_content_are_rejected(
+def test_hash_mismatch_is_rejected(
     approved_resume: dict[str, object],
     schema: dict[str, object],
 ) -> None:
@@ -211,9 +241,30 @@ def test_hash_mismatch_and_scaffold_content_are_rejected(
     mismatch["summary"][0] += " Changed."  # type: ignore[index]
     assert any("content_hash" in error for error in validate_resume(mismatch, schema))
 
-    scaffold = load_resume(DATA_PATH)
+
+def test_scaffold_lifecycle_rejects_public_content(
+    approved_resume: dict[str, object],
+    schema: dict[str, object],
+) -> None:
+    scaffold = deepcopy(approved_resume)
+    scaffold["release"] = {
+        "state": "scaffold",
+        "version": None,
+        "approved_at": None,
+        "content_hash": None,
+    }
+    scaffold["basics"] = {
+        "name": "Sample Candidate",
+        "headline": None,
+        "location": None,
+        "links": [],
+    }
     scaffold["summary"] = ["Not approved."]
-    assert validate_resume(scaffold, schema)
+    scaffold["skills"] = []
+    scaffold["experience"] = []
+    scaffold["education"] = []
+
+    assert any("summary" in error for error in validate_resume(scaffold, schema))
 
 
 def test_duplicate_yaml_keys_are_rejected(tmp_path: Path) -> None:
