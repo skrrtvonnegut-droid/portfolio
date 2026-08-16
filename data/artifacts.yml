@@ -258,3 +258,85 @@ artifacts:
         last_reviewed: "2026-08-15"
         review_due: "2027-02-15"
       featured: true
+  - path: docs/about/operating-model.md
+    source_id: portfolio.architecture.career.modern-workplace-operating-model
+    metadata:
+      id: portfolio.architecture.career.modern-workplace-operating-model
+      slug: /about/operating-model/
+      kind: architecture
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - microsoft-365
+        - operations
+        - documentation
+        - governance
+      skills:
+        - architecture
+        - governance
+        - technical-writing
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-16"
+        review_due: "2027-02-15"
+      featured: true
+  - path: docs/patterns/microsoft-365/tenant-health-digest.md
+    source_id: portfolio.technical-pattern.microsoft-365.tenant-health-digest
+    metadata:
+      id: portfolio.technical-pattern.microsoft-365.tenant-health-digest
+      slug: /patterns/microsoft-365/tenant-health-digest/
+      kind: technical-pattern
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - microsoft-365
+        - security
+        - operations
+        - automation
+      skills:
+        - security-operations
+        - troubleshooting
+        - automation
+        - governance
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-16"
+        review_due: "2027-02-15"
+      featured: false
+  - path: docs/patterns/templates/incident-change-postmortem.md
+    source_id: portfolio.template.operations.incident-change-postmortem
+    metadata:
+      id: portfolio.template.operations.incident-change-postmortem
+      slug: /patterns/templates/incident-change-postmortem/
+      kind: template
+      status: published
+      classification: professional-portfolio
+      provenance: ai-assisted-original
+      authorship: breezy-lynne
+      domains:
+        - operations
+        - security
+        - documentation
+      skills:
+        - change-enablement
+        - troubleshooting
+        - technical-writing
+        - risk-modeling
+      rights:
+        publishable: true
+        attribution: null
+        source_url: null
+      review:
+        last_reviewed: "2026-08-16"
+        review_due: "2027-02-15"
+      featured: false
